@@ -25,7 +25,7 @@ class residencial {
         JsonSlurper parser = new JsonSlurper()
         Map MapData = parser.parseText(data);
 
-        if(MapData.key1 == "ApiRandiel2021"){
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
 
@@ -51,7 +51,7 @@ class residencial {
         JsonSlurper parser = new JsonSlurper()
         Map MapData = parser.parseText(data);
 
-        if(MapData.key1 == "ApiRandiel2021"){
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
 
@@ -79,7 +79,7 @@ class residencial {
         JsonSlurper parser = new JsonSlurper()
         Map MapData = parser.parseText(data);
 
-        if(MapData.key1 == "ApiRandiel2021"){
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
 
@@ -102,7 +102,7 @@ class residencial {
         JsonSlurper parser = new JsonSlurper()
         Map MapData = parser.parseText(data);
 
-        if(MapData.key1 == "pasame"){
+        if(MapData.key == "pasame"){
             println("KLOK PAPA");
         }
         else{
@@ -113,14 +113,17 @@ class residencial {
     }
 
     @RequestMapping(value="/residencial/test", method = RequestMethod.POST)
-    def InsertTest(@RequestBody String  data) {
+    def InsertTest(@RequestBody Map  data) {
 
-        JsonSlurper parser = new JsonSlurper()
-        Map MapData = parser.parseText(data);
+        println(data);
+       // JsonSlurper parser = new JsonSlurper()
+        //Map MapData = parser.parseText(data);
 
-        if(MapData.key1 == "ApiRandiel2021"){
+        Map MapData = data
 
-            MapData = MapData.data;
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data as Map
 
            if(residencialservice.TestInsert(MapData.midescri as String)){
                return MyCustomsRequests.MessageSuccess();
