@@ -29,13 +29,15 @@ class Sql {
         }
     }
 
-    def executeQueryInsertUpdate(String sql) {
+    Boolean executeQueryInsertUpdate(String sql) {
         try {
-            template.execute(sql)
+            template.execute(sql);
+            return true;
         } catch (Exception e) {
             println e.getMessage()
             println e.printStackTrace()
-            template.execute("ROLLBACK WORK:")
+            //template.execute("ROLLBACK WORK:")
+            return false;
         }
     }
 

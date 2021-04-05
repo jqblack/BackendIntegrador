@@ -16,34 +16,140 @@ class residencial {
     @Autowired
     ResidencialService residencialservice
 
-    CustomRequest customRequest
+    CustomRequest MyCustomsRequests = new CustomRequest();
 
-    @RequestMapping(value="/residencial/lista", method = RequestMethod.POST)
-    def GetListResidencial(@RequestBody String  data) {
-       println(data)
-        println("hola")
-//        JsonSlurper parser = new JsonSlurper()
-//        Map MapData = parser.parseText(rs);
-//        println(MapData)
+
+    @RequestMapping(value="/residencial/insert", method = RequestMethod.POST)
+    def InsertResidencial(@RequestBody String  data) {
+
+        JsonSlurper parser = new JsonSlurper()
+        Map MapData = parser.parseText(data);
+
+        if(MapData.key1 == "ApiRandiel2021"){
+
+            MapData = MapData.data;
+
+            if(residencialservice.InsertResidencial(MapData.nombre as String,
+                    MapData.provincia as int,
+                    MapData.municipio as int,
+                    MapData.sector as int,MapData.area as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/update", method = RequestMethod.POST)
+    def UpdateResidencial(@RequestBody String  data) {
+
+        JsonSlurper parser = new JsonSlurper()
+        Map MapData = parser.parseText(data);
+
+        if(MapData.key1 == "ApiRandiel2021"){
+
+            MapData = MapData.data;
+
+            if(residencialservice.UpdateResidencial(MapData.nombre as String,
+                    MapData.provincia as int,
+                    MapData.municipio as int,
+                    MapData.sector as int,
+                    MapData.area as int,
+                    MapData.ID_residencial as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/delete", method = RequestMethod.POST)
+    def DeleteResidencial(@RequestBody String  data) {
+
+        JsonSlurper parser = new JsonSlurper()
+        Map MapData = parser.parseText(data);
+
+        if(MapData.key1 == "ApiRandiel2021"){
+
+            MapData = MapData.data;
+
+            if(residencialservice.DeleteResidencial(MapData.ID_residencial as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/ownresidenciales", method = RequestMethod.POST)
+    def OwnResidencial(@RequestBody String  data) {
+
+        JsonSlurper parser = new JsonSlurper()
+        Map MapData = parser.parseText(data);
+
+        if(MapData.key1 == "pasame"){
+            println("KLOK PAPA");
+        }
+        else{
+            println("Brrrr");
+        }
+
         return residencialservice.getResidencialList();
     }
 
-    @RequestMapping(value="/residencial/encryp", method = RequestMethod.POST)
-    def getClientes(@RequestParam(name = "data", required = false) String data) {
+    @RequestMapping(value="/residencial/test", method = RequestMethod.POST)
+    def InsertTest(@RequestBody String  data) {
 
-        String rs = new String(data.decodeBase64())
         JsonSlurper parser = new JsonSlurper()
-        Map MapData = parser.parseText(rs);
+        Map MapData = parser.parseText(data);
 
-        if(MapData.key == "ApiRandiel2021"){
-            MapData = MapData.data
-            return residencialservice.GetNameId(MapData.MyId as int)
+        if(MapData.key1 == "ApiRandiel2021"){
+
+            MapData = MapData.data;
+
+           if(residencialservice.TestInsert(MapData.midescri as String)){
+               return MyCustomsRequests.MessageSuccess();
+           }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
         }
         else{
-            println("Token NO valido")
+            return MyCustomsRequests.TokenNoValido();
         }
-
     }
+
+//    @RequestMapping(value="/residencial/encryp", method = RequestMethod.POST)
+//    def getClientes(@RequestParam(name = "data", required = false) String data) {
+//
+//        String rs = new String(data.decodeBase64())
+//        JsonSlurper parser = new JsonSlurper()
+//        Map MapData = parser.parseText(rs);
+//
+//        if(MapData.key == "ApiRandiel2021"){
+//            MapData = MapData.data
+//            return residencialservice.GetNameId(MapData.MyId as int)
+//        }
+//        else{
+//            println("Token NO valido")
+//        }
+//
+//    }
 
 
 }
