@@ -137,6 +137,39 @@ class residencial {
         }
     }
 
+    @RequestMapping(value="/residencial/get_provincias", method = RequestMethod.POST)
+    def Get_Provincias(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            return residencialservice.Get_Provincias()
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/test_sending", method = RequestMethod.POST)
+    def test_sending(@RequestBody Map  data) {
+
+        println(data);
+        // JsonSlurper parser = new JsonSlurper()
+        //Map MapData = parser.parseText(data);
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data as Map
+
+            print(MapData.idprovincia)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
 //    @RequestMapping(value="/residencial/encryp", method = RequestMethod.POST)
 //    def getClientes(@RequestParam(name = "data", required = false) String data) {
 //

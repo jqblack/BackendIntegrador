@@ -66,4 +66,14 @@ class ResidencialService {
         String query = "Select * from public.calificacion where id = ${ID}";
         return sql.executeQueryAsMap(query)
     }
+
+    List Get_Provincias(){
+        String query = "SELECT \n" +
+                "  id as value,\n" +
+                "  descripcion as label\n" +
+                "FROM \n" +
+                "  public.provincias2;"
+
+        return sql.executeQueryAsList(query);
+    }
 }
