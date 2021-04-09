@@ -95,4 +95,16 @@ class ResidencialService {
                 "  public.\"testImg\" as t  where t.id = ${ID};";
         return sql.executeQueryAsMap(query)
     }
+
+    List getDataTest(){
+        String query = "SELECT \n" +
+                "  \"ID\" as id,\n" +
+                "  \"ID_Drop1\" as combo1,\n" +
+                "  \"ID_Drop2\" as combo2,\n" +
+                "  descripcion as entrada,\n" +
+                "  fecha\n" +
+                "FROM \n" +
+                "  public.\"FromTest\";";
+        return sql.executeQueryAsList(query)
+    }
 }

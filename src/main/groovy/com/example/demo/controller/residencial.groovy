@@ -225,4 +225,28 @@ class residencial {
     }
 
 
+
+    @RequestMapping(value="/residencial/testinsertaxios", method = RequestMethod.POST)
+    def residencial_testinsertaxios(@RequestBody Map  data) {
+
+        println(data);
+        Map MapData = data;
+
+        println(MapData)
+
+//        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+//            return residencialservice.Get_Provincias()
+//        }
+//        else{
+//            return MyCustomsRequests.TokenNoValido();
+//        }
+    }
+
+
+    @RequestMapping(value="/residencial/testgetaxios", method = RequestMethod.POST)
+    def residencial_testgetaxios() {
+
+        return residencialservice.getDataTest()
+    }
+
 }
