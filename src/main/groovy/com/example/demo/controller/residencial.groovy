@@ -179,14 +179,33 @@ class residencial {
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data as Map
-            String baseIMG = MapData.f_img;
-//            println(baseIMG);
-//            baseIMG = baseIMG //substring(0,baseIMG.indexOf(',',2))
-//            println(baseIMG);
-            byte[] baseIMGdecode = baseIMG.decodeBase64();
+//            String baseIMG;
+////            println(baseIMG);
+////            baseIMG = baseIMG //substring(0,baseIMG.indexOf(',',2))
+////            println(baseIMG);
+//            byte[] baseIMGdecode = baseIMG.decodeBase64();
 //            println(baseIMGdecode)
 
-            return residencialservice.TestInsertIMG(baseIMGdecode)
+            return residencialservice.TestInsertIMG(MapData.f_img as String)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+
+    @RequestMapping(value="/residencial/testget_img", method = RequestMethod.POST)
+    def testget_img(@RequestBody Map  data ) {
+
+        Map MapData = data
+        //println(MapData);
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data as Map
+
+
+            return residencialservice.TestgetIMG(MapData.IDimg as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();

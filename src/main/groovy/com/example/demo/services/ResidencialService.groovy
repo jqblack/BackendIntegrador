@@ -76,13 +76,13 @@ class ResidencialService {
 
         return sql.executeQueryAsList(query);
     }
-    Boolean TestInsertIMG(byte[] imgbase){
+    Boolean TestInsertIMG(String imgbase){
         String query ="INSERT INTO \n" +
                 "  public.\"testImg\"\n" +
                 "(\n" +
                 "  \"baseIMG\"\n" +
                 ")\n" +
-                "VALUES (${imgbase});";
+                "VALUES ('${imgbase}');";
 
         return sql.executeQueryInsertUpdate(query)
     }
@@ -106,5 +106,10 @@ class ResidencialService {
                 "FROM \n" +
                 "  public.\"FromTest\";";
         return sql.executeQueryAsList(query)
+    }
+
+    Map TestgetIMG(int IDIMG){
+        String query = "Select * from public.\"testImg\" where id = ${IDIMG}";
+        return sql.executeQueryAsMap(query)
     }
 }
