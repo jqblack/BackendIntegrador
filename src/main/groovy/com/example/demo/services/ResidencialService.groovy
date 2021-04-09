@@ -76,4 +76,23 @@ class ResidencialService {
 
         return sql.executeQueryAsList(query);
     }
+    Boolean TestInsertIMG(byte[] imgbase){
+        String query ="INSERT INTO \n" +
+                "  public.\"testImg\"\n" +
+                "(\n" +
+                "  \"baseIMG\"\n" +
+                ")\n" +
+                "VALUES (${imgbase});";
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
+    Map GetImg(int ID){
+        String query = "SELECT \n" +
+                "  t.id,\n" +
+                "  encode(t.\"miImg\", 'base64') as imgbase64\n" +
+                "FROM \n" +
+                "  public.\"testImg\" as t  where t.id = ${ID};";
+        return sql.executeQueryAsMap(query)
+    }
 }

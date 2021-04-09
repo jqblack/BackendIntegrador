@@ -151,7 +151,7 @@ class residencial {
     }
 
     @RequestMapping(value="/residencial/test_sending", method = RequestMethod.POST)
-    def test_sending(@RequestBody Map  data) {
+    def test_sending(@RequestBody Map  data ) {
 
         println(data);
         // JsonSlurper parser = new JsonSlurper()
@@ -170,22 +170,59 @@ class residencial {
         }
     }
 
-//    @RequestMapping(value="/residencial/encryp", method = RequestMethod.POST)
-//    def getClientes(@RequestParam(name = "data", required = false) String data) {
-//
-//        String rs = new String(data.decodeBase64())
-//        JsonSlurper parser = new JsonSlurper()
-//        Map MapData = parser.parseText(rs);
-//
-//        if(MapData.key == "ApiRandiel2021"){
-//            MapData = MapData.data
-//            return residencialservice.GetNameId(MapData.MyId as int)
-//        }
-//        else{
-//            println("Token NO valido")
-//        }
-//
-//    }
+    @RequestMapping(value="/residencial/test_img", method = RequestMethod.POST)
+    def test_img(@RequestBody Map  data ) {
+
+        Map MapData = data
+        //println(MapData);
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data as Map
+            String baseIMG = MapData.f_img;
+//            println(baseIMG);
+//            baseIMG = baseIMG //substring(0,baseIMG.indexOf(',',2))
+//            println(baseIMG);
+            byte[] baseIMGdecode = baseIMG.decodeBase64();
+//            println(baseIMGdecode)
+
+            return residencialservice.TestInsertIMG(baseIMGdecode)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/get_test_img", method = RequestMethod.POST)
+    def get_test_img(@RequestBody Map  data ) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            return residencialservice.GetImg(MapData.idIMG as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/encryp", method = RequestMethod.POST)
+    def getClientes(@RequestParam(name = "data", required = false) String data) {
+
+        String rs = new String(data.decodeBase64())
+        JsonSlurper parser = new JsonSlurper()
+        Map MapData = parser.parseText(rs);
+
+        if(MapData.key == "ApiRandiel2021"){
+            MapData = MapData.data
+            return residencialservice.GetNameId(MapData.MyId as int)
+        }
+        else{
+            println("Token NO valido")
+        }
+
+    }
 
 
 }
