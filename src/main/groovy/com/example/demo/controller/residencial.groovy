@@ -285,7 +285,7 @@ class residencial {
 
     @RequestMapping(value="/residencial/testgetaxios", method = RequestMethod.POST)
     def residencial_testgetaxios() {
-
+Map data;
         return residencialservice.getDataTest()
     }
 
