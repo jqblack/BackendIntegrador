@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
+import java.text.SimpleDateFormat
+
 @RestController
 class residencial {
 
@@ -261,6 +263,25 @@ class residencial {
 //        }
     }
 
+    @RequestMapping(value="/residencial/testdate", method = RequestMethod.POST)
+    def testdate(@RequestBody Map  data) {
+
+        Map MapData = data;
+
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            SimpleDateFormat sdformat = new SimpleDateFormat("dd/MM/yyyy");
+            Date dt = sdformat.parse(MapData.fecha as String);
+            println (dt)
+
+            return residencialservice.TestDate(dt)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
 
     @RequestMapping(value="/residencial/testgetaxios", method = RequestMethod.POST)
     def residencial_testgetaxios() {

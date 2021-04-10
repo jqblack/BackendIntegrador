@@ -112,4 +112,20 @@ class ResidencialService {
         String query = "Select * from public.\"testImg\" where id = ${IDIMG}";
         return sql.executeQueryAsMap(query)
     }
+
+    Boolean TestDate(Date fecha){
+        String query = "INSERT INTO \n" +
+                "  public.test\n" +
+                "(\n" +
+                "  id,\n" +
+                "  nombre,\n" +
+                "  fecha\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  5,\n" +
+                "  'Randiel',\n" +
+                " to_date(to_char('${fecha}'::DATE,'dd/mm/yyyy'),'dd/mm/yyyy')\n" +
+                ");";
+        return sql.executeQueryInsertUpdate(query)
+    }
 }
