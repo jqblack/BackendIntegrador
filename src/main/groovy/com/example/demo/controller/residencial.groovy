@@ -35,9 +35,10 @@ class residencial {
     }
 
     @RequestMapping(value="/residencial/insert", method = RequestMethod.POST)
-    def InsertResidencial(@RequestBody String  data) {
+    def InsertResidencial(@RequestBody Map  data) {
 
         Map MapData = data
+        println(MapData)
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
@@ -60,7 +61,7 @@ class residencial {
     }
 
     @RequestMapping(value="/residencial/update", method = RequestMethod.POST)
-    def UpdateResidencial(@RequestBody String  data) {
+    def UpdateResidencial(@RequestBody Map  data) {
 
         JsonSlurper parser = new JsonSlurper()
         Map MapData = parser.parseText(data);
@@ -88,7 +89,7 @@ class residencial {
     }
 
     @RequestMapping(value="/residencial/delete", method = RequestMethod.POST)
-    def DeleteResidencial(@RequestBody String  data) {
+    def DeleteResidencial(@RequestBody Map  data) {
 
         JsonSlurper parser = new JsonSlurper()
         Map MapData = parser.parseText(data);
@@ -111,7 +112,7 @@ class residencial {
     }
 
     @RequestMapping(value="/residencial/ownresidenciales", method = RequestMethod.POST)
-    def OwnResidencial(@RequestBody String  data) {
+    def OwnResidencial(@RequestBody Map  data) {
 
         JsonSlurper parser = new JsonSlurper()
         Map MapData = parser.parseText(data);

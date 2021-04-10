@@ -1,7 +1,7 @@
 package com.example.demo.controller
 
 import com.example.demo.Utilidades.CustomRequest
-import com.example.demo.services.AreasComunesServices
+import com.example.demo.services.MantenimientoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -9,15 +9,16 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class AreasComunesController {
+class MantenimientoController {
+
 
     @Autowired
-    AreasComunesServices areasComunesServices
+    MantenimientoService mantenimientoService
 
     CustomRequest MyCustomsRequests = new CustomRequest();
 
-    @RequestMapping(value="/areas/insert", method = RequestMethod.POST)
-    def insertAreas(@RequestBody Map  data) {
+    @RequestMapping(value="/mantenimientos/insert", method = RequestMethod.POST)
+    def insertMantenimiento(@RequestBody Map  data) {
 
         Map MapData = data
 
@@ -25,7 +26,7 @@ class AreasComunesController {
 
             MapData = MapData.data;
 
-            if(areasComunesServices.Insert(MapData.descripcion as String)){
+            if(mantenimientoService.Insert(MapData.descripcion as String, MapData.dias as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -38,8 +39,8 @@ class AreasComunesController {
         }
     }
 
-    @RequestMapping(value="/areas/update", method = RequestMethod.POST)
-    def UpdateAreas(@RequestBody Map  data) {
+    @RequestMapping(value="/mantenimientos/update", method = RequestMethod.POST)
+    def updateMantenimiento(@RequestBody Map  data) {
 
         Map MapData = data
 
@@ -47,7 +48,7 @@ class AreasComunesController {
 
             MapData = MapData.data;
 
-            if(areasComunesServices.Update(MapData.idArea as int, MapData.descripcion as String)){
+            if(mantenimientoService.Update(MapData.idMantenimiento as int, MapData.dias as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -60,8 +61,8 @@ class AreasComunesController {
         }
     }
 
-    @RequestMapping(value="/areas/delete", method = RequestMethod.POST)
-    def DeleteAreas(@RequestBody Map  data) {
+    @RequestMapping(value="/mantenimientos/getmantenimientos", method = RequestMethod.POST)
+    def Getmantenimientos(@RequestBody Map  data) {
 
         Map MapData = data
 
@@ -69,29 +70,7 @@ class AreasComunesController {
 
             MapData = MapData.data;
 
-            if(areasComunesServices.Delete(MapData.idArea as int)){
-
-                return MyCustomsRequests.MessageSuccess();
-            }
-            else{
-                return MyCustomsRequests.MessageFailed();
-            }
-        }
-        else{
-            return MyCustomsRequests.TokenNoValido();
-        }
-    }
-
-    @RequestMapping(value="/areas/getAreasbyResidencial", method = RequestMethod.POST)
-    def getAreasbyResidencial(@RequestBody Map  data) {
-
-        Map MapData = data
-
-        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
-
-            MapData = MapData.data;
-
-            areasComunesServices.GetAreasComunes(MapData.idResidencial as int)
+            return mantenimientoService.GetMantenimientos(MapData.idresidencias as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();

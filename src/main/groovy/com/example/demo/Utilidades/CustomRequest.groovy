@@ -23,7 +23,7 @@ class CustomRequest{
         Map mapa = [:];
         Map MapData = [:]
 
-        mapa.put("key ","1");
+        mapa.put("key","1");
         MapData.put("mensaje","Accion completada correctamente")
 
         mapa.put("data",MapData);

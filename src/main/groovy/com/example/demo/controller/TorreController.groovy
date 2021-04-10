@@ -1,8 +1,7 @@
 package com.example.demo.controller
 
 import com.example.demo.Utilidades.CustomRequest
-import com.example.demo.services.LoginService
-import groovy.json.JsonSlurper
+import com.example.demo.services.TorreService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,27 +9,26 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class LoginController {
+class TorreController {
 
     @Autowired
-    LoginService loginService
+    TorreService torreService
 
     CustomRequest MyCustomsRequests = new CustomRequest();
 
-    @RequestMapping(value="/login/iniciarsesion", method = RequestMethod.POST)
-    def Login(@RequestBody Map  data) {
+    @RequestMapping(value="/torre/gettorres", method = RequestMethod.POST)
+    def getAllResidencial(@RequestBody Map  data) {
 
-        JsonSlurper parser = new JsonSlurper()
-        Map MapData = parser.parseText(data);
+        Map MapData = data
 
-        if(MapData.key1 == "ApiRandiel2021"){
-
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
 
-            return loginService.VerifiedUser(MapData.username as String, MapData.pass as String)
+            return torreService.GetAllTorre(MapData.id as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();
         }
     }
+
 }

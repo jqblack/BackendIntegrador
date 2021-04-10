@@ -13,7 +13,7 @@ class ResidencialService {
 
     List getAllResidencial(){
         String query = "SELECT \n" +
-                "  \"ID_residencial\",\n" +
+                "  \"ID_residencial\" as id,\n" +
                 "  nombre,\n" +
                 "  \"ID_provincia\",\n" +
                 "  \"ID_municipio\",\n" +
@@ -33,9 +33,11 @@ class ResidencialService {
                 "\"ID_municipio\",\n" +
                 "\"ID_sector\",\n" +
                 "\"areacuadrada\", \"ID_status\", \"imgPortada\")\n" +
-                "VALUES('${nombre}',${pro}),${muni},${sector},${area},${1},${imgbase}";
+                "VALUES('${nombre}',${pro},${muni},${sector},${area},${1},'${imgbase}')";
+
 
         return sql.executeQueryInsertUpdate(query);
+        return true
     }
 
     Boolean UpdateResidencial(String nombre,int pro,int muni, int sector, int area, int ID_resi){
