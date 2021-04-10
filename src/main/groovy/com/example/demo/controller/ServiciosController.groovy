@@ -1,7 +1,7 @@
 package com.example.demo.controller
 
 import com.example.demo.Utilidades.CustomRequest
-import com.example.demo.services.MantenimientoService
+import com.example.demo.services.ServiciosService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -9,24 +9,37 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class MantenimientoController {
-
+class ServiciosController {
 
     @Autowired
-    MantenimientoService mantenimientoService
+    ServiciosService serviciosService
 
     CustomRequest MyCustomsRequests = new CustomRequest();
 
-    @RequestMapping(value="/mantenimientos/insert", method = RequestMethod.POST)
-    def insertMantenimiento(@RequestBody Map  data) {
+    @RequestMapping(value="/servicios/getservicios", method = RequestMethod.POST)
+    def getAllServicios(@RequestBody Map  data) {
 
         Map MapData = data
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
-
             MapData = MapData.data;
 
-            if(mantenimientoService.Insert(MapData.descripcion as String, MapData.dias as int)){
+            return serviciosService.GetAllServices(MapData.idresidencial as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/servicios/insert", method = RequestMethod.POST)
+    def InsertServicio(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            if(serviciosService.Insert(MapData.descripcion as String,MapData.cobro as int, MapData.pago as int,MapData.idresidencial as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -39,16 +52,15 @@ class MantenimientoController {
         }
     }
 
-    @RequestMapping(value="/mantenimientos/update", method = RequestMethod.POST)
-    def updateMantenimiento(@RequestBody Map  data) {
+    @RequestMapping(value="/servicios/update", method = RequestMethod.POST)
+    def UpdateServicio(@RequestBody Map  data) {
 
         Map MapData = data
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
-
             MapData = MapData.data;
 
-            if(mantenimientoService.Update(MapData.idMantenimiento as int, MapData.dias as int)){
+            if(serviciosService.Update(MapData.descripcion as String,MapData.cobro as int, MapData.pago as int,MapData.idresidencial as int, MapData.id as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -60,22 +72,4 @@ class MantenimientoController {
             return MyCustomsRequests.TokenNoValido();
         }
     }
-
-    @RequestMapping(value="/mantenimientos/getmantenimientos", method = RequestMethod.POST)
-    def Getmantenimientos(@RequestBody Map  data) {
-
-        Map MapData = data
-
-        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
-
-            MapData = MapData.data;
-
-            return mantenimientoService.GetMantenimientos(MapData.idresidencias as int)
-        }
-        else{
-            return MyCustomsRequests.TokenNoValido();
-        }
-    }
-
-
 }

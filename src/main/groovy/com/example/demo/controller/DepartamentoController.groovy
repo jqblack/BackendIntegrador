@@ -1,8 +1,7 @@
 package com.example.demo.controller
 
 import com.example.demo.Utilidades.CustomRequest
-import com.example.demo.services.TorreService
-import com.sun.javafx.collections.MappingChange
+import com.example.demo.services.DepartamentoService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -10,37 +9,39 @@ import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class TorreController {
+class DepartamentoController {
 
     @Autowired
-    TorreService torreService
+    DepartamentoService departamentoService
 
     CustomRequest MyCustomsRequests = new CustomRequest();
 
-    @RequestMapping(value="/torre/gettorres", method = RequestMethod.POST)
-    def getAllTorres(@RequestBody Map  data) {
+
+    @RequestMapping(value="/departamento/getDepartamentos", method = RequestMethod.POST)
+    def GetDepartamentos(@RequestBody Map  data) {
 
         Map MapData = data
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
 
-            return torreService.GetAllTorre(MapData.id as int)
+            return departamentoService.GetDepartamentos(MapData.id as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();
         }
     }
 
-    @RequestMapping(value="/torre/insert", method = RequestMethod.POST)
-    def InsertTorres(@RequestBody Map  data) {
+    @RequestMapping(value="/departamento/insert", method = RequestMethod.POST)
+    def InsertDepartamento(@RequestBody Map  data) {
 
         Map MapData = data
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
 
-            if(torreService.Insert(MapData.idresidencial as int, MapData.nombre as String, MapData.niveles as int)){
+            if(departamentoService.Insert(MapData.id as int,MapData.nombre as String,MapData.preventa as int, MapData.prealquiler as int,
+                    MapData.dispoventa as Boolean,MapData.cantBath as int, MapData.cantHabi as int, MapData.amueblado as Boolean)){
                 return MyCustomsRequests.MessageSuccess()
             }
             else{
@@ -52,15 +53,15 @@ class TorreController {
         }
     }
 
-    @RequestMapping(value="/torre/update", method = RequestMethod.POST)
-    def UpdateTorres(@RequestBody Map  data) {
+    @RequestMapping(value="/departamento/update", method = RequestMethod.POST)
+    def UpdateDepartamento(@RequestBody Map  data) {
 
         Map MapData = data
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
 
-            if(torreService.Update(MapData.idresidencial as int, MapData.nombre as String, MapData.niveles as int, MapData.id as int)){
+            if(departamentoService.Update(MapData.idDepa as int,MapData.nombre as String,MapData.preventa as int, MapData.prealquiler as int, MapData.dispoventa as Boolean)){
                 return MyCustomsRequests.MessageSuccess()
             }
             else{
@@ -71,5 +72,4 @@ class TorreController {
             return MyCustomsRequests.TokenNoValido();
         }
     }
-
 }
