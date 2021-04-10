@@ -27,13 +27,13 @@ class ResidencialService {
         return sql.executeQueryAsList(query);
     }
 
-    Boolean InsertResidencial(String nombre,int pro,int muni, int sector, int area){
+    Boolean InsertResidencial(String nombre,int pro,int muni, int sector, int area,String imgbase){
         String query = "INSERT INTO PUBLIC.\"Residencial\"(\"nombre\",\n" +
                 "\"ID_provincia\",\n" +
                 "\"ID_municipio\",\n" +
                 "\"ID_sector\",\n" +
-                "\"areacuadrada\", \"ID_status\")\n" +
-                "VALUES('${nombre}',${pro}),${muni},${sector},${area},${1}";
+                "\"areacuadrada\", \"ID_status\", \"imgPortada\")\n" +
+                "VALUES('${nombre}',${pro}),${muni},${sector},${area},${1},${imgbase}";
 
         return sql.executeQueryInsertUpdate(query);
     }

@@ -46,7 +46,7 @@ class residencial {
             if(residencialservice.InsertResidencial(MapData.nombre as String,
                     MapData.provincia as int,
                     MapData.municipio as int,
-                    MapData.sector as int,MapData.area as int)){
+                    MapData.sector as int,MapData.area as int,MapData.image as String)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

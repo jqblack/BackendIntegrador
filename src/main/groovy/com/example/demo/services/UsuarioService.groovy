@@ -29,7 +29,7 @@ class UsuarioService {
         Map MapPersona = [:];
 
         MapPersona = sql.executeQueryAsMap(query);
-        if(!MapPersona.isEmpty()){
+        if(!MapPersona != [:]){
             query = "INSERT INTO \n" +
                     "  public.\"Usuario\"\n" +
                     "(\n" +
@@ -43,7 +43,7 @@ class UsuarioService {
                     "  '${user}',\n" +
                     "  '${pass}',\n" +
                     "  ${MapPersona.IdPersona},\n" +
-                    "  ${numCuenta},\n" +
+                    "  '${numCuenta}',\n" +
                     "  ${1}\n" +
                     ");"
 
@@ -53,4 +53,29 @@ class UsuarioService {
             return false;
         }
     }
+
+    Map Login(String user, String pass){
+        String query = "SELECT U.* FROM PUBLIC.\"Usuario\" AS U WHERE U.\"userName\" = '${user}' AND U.password = '${pass}'";
+
+        return sql.executeQueryAsMap(query);
+    }
+
+    List GetPermissionUser(int idUser){
+        String query = "SELECT \n" +
+                " R.*,\n" +
+                " TU.\"idTipoUsuario\" as descripcionTipoUser,\n" +
+                "  RE.nombre as nombre_residencial \n" +
+                " FROM PUBLIC.\"Roles\" AS R\n" +
+                "INNER JOIN PUBLIC.\"TipoUsuario\" AS TU \n" +
+                "ON R.\"idTipo\" = TU.\"idTipoUsuario\"\n" +
+                "INNER JOIN PUBLIC.\"Residencial\" AS RE \n" +
+                "ON R.\"ID_residencial\" = RE.\"ID_residencial\"\n" +
+                "WHERE R.\"idUsuario\" = ${idUser}";
+
+        return sql.executeQueryAsList(query)
+    }
+
+
+
+
 }
