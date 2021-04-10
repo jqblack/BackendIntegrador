@@ -11,6 +11,22 @@ class ResidencialService {
     @Autowired
     Sql sql
 
+    List getAllResidencial(){
+        String query = "SELECT \n" +
+                "  \"ID_residencial\",\n" +
+                "  nombre,\n" +
+                "  \"ID_provincia\",\n" +
+                "  \"ID_municipio\",\n" +
+                "  \"ID_sector\",\n" +
+                "  areacuadrada,\n" +
+                "  \"MinimoVenta\",\n" +
+                "  \"MinimoAlquiler\",\n" +
+                "  \"ID_status\"\n" +
+                "FROM \n" +
+                "  public.\"Residencial\" ;";
+        return sql.executeQueryAsList(query);
+    }
+
     Boolean InsertResidencial(String nombre,int pro,int muni, int sector, int area){
         String query = "INSERT INTO PUBLIC.\"Residencial\"(\"nombre\",\n" +
                 "\"ID_provincia\",\n" +
@@ -26,7 +42,7 @@ class ResidencialService {
         String query = "UPDATE \n" +
                 "  public.\"Residencial\" \n" +
                 "SET \n" +
-                "  \"nombre\" = ${nombre},\n" +
+                "  \"nombre\" = '${nombre}',\n" +
                 "  \"ID_provincia\" = ${pro},\n" +
                 "  \"ID_municipio\" = ${muni},\n" +
                 "  \"ID_sector\" = ${sector},\n" +
@@ -67,15 +83,6 @@ class ResidencialService {
         return sql.executeQueryAsMap(query)
     }
 
-    List Get_Provincias(){
-        String query = "SELECT \n" +
-                "  id as value,\n" +
-                "  descripcion as label\n" +
-                "FROM \n" +
-                "  public.provincias2;"
-
-        return sql.executeQueryAsList(query);
-    }
     Boolean TestInsertIMG(String imgbase){
         String query ="INSERT INTO \n" +
                 "  public.\"testImg\"\n" +

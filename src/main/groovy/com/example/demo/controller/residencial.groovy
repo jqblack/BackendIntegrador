@@ -21,11 +21,23 @@ class residencial {
     CustomRequest MyCustomsRequests = new CustomRequest();
 
 
+    @RequestMapping(value="/residencial/getAllResidencial", method = RequestMethod.POST)
+    def getAllResidencial(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            residencialservice.getAllResidencial()
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/residencial/insert", method = RequestMethod.POST)
     def InsertResidencial(@RequestBody String  data) {
 
-        JsonSlurper parser = new JsonSlurper()
-        Map MapData = parser.parseText(data);
+        Map MapData = data
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
@@ -114,30 +126,6 @@ class residencial {
         return residencialservice.getResidencialList();
     }
 
-    @RequestMapping(value="/residencial/test", method = RequestMethod.POST)
-    def InsertTest(@RequestBody Map  data) {
-
-        println(data);
-       // JsonSlurper parser = new JsonSlurper()
-        //Map MapData = parser.parseText(data);
-
-        Map MapData = data
-
-        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
-
-            MapData = MapData.data as Map
-
-           if(residencialservice.TestInsert(MapData.midescri as String)){
-               return MyCustomsRequests.MessageSuccess();
-           }
-            else{
-                return MyCustomsRequests.MessageFailed();
-            }
-        }
-        else{
-            return MyCustomsRequests.TokenNoValido();
-        }
-    }
 
     @RequestMapping(value="/residencial/get_provincias", method = RequestMethod.POST)
     def Get_Provincias(@RequestBody Map  data) {
@@ -285,7 +273,7 @@ class residencial {
 
     @RequestMapping(value="/residencial/testgetaxios", method = RequestMethod.POST)
     def residencial_testgetaxios() {
-Map data;
+
         return residencialservice.getDataTest()
     }
 
