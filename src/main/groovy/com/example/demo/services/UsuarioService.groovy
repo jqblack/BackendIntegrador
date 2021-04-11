@@ -29,7 +29,7 @@ class UsuarioService {
         Map MapPersona = [:];
 
         MapPersona = sql.executeQueryAsMap(query);
-        if(!MapPersona != [:]){
+        if(MapPersona != [:]){
             query = "INSERT INTO \n" +
                     "  public.\"Usuario\"\n" +
                     "(\n" +
