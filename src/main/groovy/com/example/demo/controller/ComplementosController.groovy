@@ -66,4 +66,48 @@ class ComplementosController {
         }
 
     }
+
+    @RequestMapping(value="/complementos/calificar", method = RequestMethod.POST)
+    def updateMantenimiento(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(complementosService.InsertClasificacion(MapData.idUser as int, MapData.idDepartamento as int, MapData.calificacion as int, MapData.descripcion as String)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/complementos/insertsolicitud", method = RequestMethod.POST)
+    def InsertSolicitud(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(complementosService.InsertSolicitud(MapData.idUser as int, MapData.idDepar as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
 }

@@ -24,7 +24,7 @@ class ServiciosController {
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
 
-            return serviciosService.GetAllServices(MapData.idresidencial as int)
+            return serviciosService.GetAllServices(MapData.id as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();

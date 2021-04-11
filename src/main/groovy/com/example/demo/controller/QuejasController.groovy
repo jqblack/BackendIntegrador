@@ -16,6 +16,22 @@ class QuejasController {
 
     CustomRequest MyCustomsRequests = new CustomRequest();
 
+    @RequestMapping(value="/quejas/getquejas", method = RequestMethod.POST)
+    def Getmantenimientos(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return quejasService.GetTiposQuejas(MapData.idresidencial as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/quejas/insert", method = RequestMethod.POST)
     def insertQuejas(@RequestBody Map  data) {
 
@@ -25,7 +41,7 @@ class QuejasController {
 
             MapData = MapData.data;
 
-            if(mantenimientoService.Insert(MapData.descripcion as String, MapData.dias as int)){
+            if(quejasService.Insert(MapData.descripcion as String,MapData.cantAdvertencia as int, MapData.limite as int, MapData.costo as int, MapData.diriguido as int, MapData.idresi as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -37,4 +53,52 @@ class QuejasController {
             return MyCustomsRequests.TokenNoValido();
         }
     }
+
+    @RequestMapping(value="/quejas/update", method = RequestMethod.POST)
+    def updateQuejas(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(quejasService.Update(MapData.descripcion as String,MapData.cantAdvertencia as int, MapData.limite as int,
+                    MapData.costo as int, MapData.diriguido as int, MapData.idresi as int,MapData.idTipoqueja as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/quejas/inserttouserqueja", method = RequestMethod.POST)
+    def InsertToUserQuejas(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(quejasService.InsertQueja(MapData.idTipoqueja as int, MapData.idUserfrom as int, MapData.idUserto as int,
+                    MapData.descripcion as String, MapData.idUser as int, MapData.username as String)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+
 }

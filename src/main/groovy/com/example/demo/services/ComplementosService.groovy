@@ -46,4 +46,42 @@ class ComplementosService {
 
         return sql.executeQueryAsList(query);
     }
+
+    Boolean InsertClasificacion(int idUser, int idDepart, int cali, String des){
+        String query = "INSERT INTO \n" +
+                "  public.\"Calificacion\"\n" +
+                "(\n" +
+                "  \"ID_usuario\",\n" +
+                "  \"ID_departamento\",\n" +
+                "  \"Calificacion\",\n" +
+                "  descripcion,\n" +
+                "  fecha\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idUser},\n" +
+                "  ${idDepart},\n" +
+                "  ${cali},\n" +
+                "  '${des}',\n" +
+                "  now()\n" +
+                ");"
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
+    Boolean InsertSolicitud(int idUser, int idDepart){
+        String query = "INSERT INTO \n" +
+                "  public.\"SolicitudCompra\"\n" +
+                "(\n" +
+                "  \"ID_usuario\",\n" +
+                "  fecha,\n" +
+                "  \"ID_departamento\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idUser},\n" +
+                "  now(),\n" +
+                "  ${idDepart}\n" +
+                ");"
+
+        return sql.executeQueryInsertUpdate(query)
+    }
 }

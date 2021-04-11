@@ -17,7 +17,7 @@ class DepartamentoController {
     CustomRequest MyCustomsRequests = new CustomRequest();
 
 
-    @RequestMapping(value="/departamento/getDepartamentos", method = RequestMethod.POST)
+    @RequestMapping(value="/departamento/getdepartamentos", method = RequestMethod.POST)
     def GetDepartamentos(@RequestBody Map  data) {
 
         Map MapData = data
