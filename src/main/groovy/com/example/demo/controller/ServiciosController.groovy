@@ -24,7 +24,7 @@ class ServiciosController {
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
 
-            return serviciosService.GetAllServices(MapData.id as int)
+            return serviciosService.GetAllServices(MapData.idResi as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();
@@ -39,7 +39,7 @@ class ServiciosController {
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
 
-            if(serviciosService.Insert(MapData.descripcion as String,MapData.cobro as int, MapData.pago as int,MapData.idresidencial as int)){
+            if(serviciosService.Insert(MapData.descripcion as String,MapData.cobro as int, MapData.pago as int,MapData.idResi as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

@@ -13,7 +13,7 @@ class MantenimientoService {
     Sql sql
 
 
-    Boolean Insert( String descri, int cantdias){
+    Boolean Insert( String descri, int cantdias, List ListResi){
         String query = "INSERT INTO \n" +
                 "  public.\"MantenimientoArea\"\n" +
                 "(\n" +
@@ -23,9 +23,32 @@ class MantenimientoService {
                 "VALUES (\n" +
                 "  '${descri}',\n" +
                 "  ${cantdias}\n" +
-                ");"
+                ") RETURNING \"ID_TipoMantenimiento\";"
 
-        return sql.executeQueryInsertUpdate(query);
+        Map mapa = [:]
+        mapa = sql.executeQueryAsMap(query);
+
+        if(mapa != [:]){
+
+            for (int i = 0; i < ListResi.size(); i++) {
+                query = "INSERT INTO \n" +
+                        "  public.\"MantenimientovsResidencial\"\n" +
+                        "(\n" +
+                        "  \"idMatenimiento\",\n" +
+                        "  \"idResidencial\"\n" +
+                        ")\n" +
+                        "VALUES (\n" +
+                        "  ${mapa.ID_TipoMantenimiento},\n" +
+                        "  ${ListResi[i]}\n" +
+                        ");"
+                sql.executeQueryInsertUpdate(query)
+            }
+
+            return true
+        }
+        else{
+            return false
+        }
     }
 
     Boolean Update(int idMante, int CantDias){

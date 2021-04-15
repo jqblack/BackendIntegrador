@@ -25,7 +25,7 @@ class AreasComunesController {
 
             MapData = MapData.data;
 
-            if(areasComunesServices.Insert(MapData.descripcion as String)){
+            if(areasComunesServices.Insert(MapData.descripcion as String, MapData.idResi as int, MapData.nombre as String)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -91,7 +91,7 @@ class AreasComunesController {
 
             MapData = MapData.data;
 
-            areasComunesServices.GetAreasComunes(MapData.idResidencial as int)
+            areasComunesServices.GetAreasComunes(MapData.idResi as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();

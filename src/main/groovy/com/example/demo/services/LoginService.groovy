@@ -35,7 +35,17 @@ class LoginService {
 
             listPermissions = sql.executeQueryAsList(query);
 
+            println(query)
+
             mapa.put("Permisos",listPermissions);
+
+            query = "SELECT \n" +
+                    "count(R.*) as cantPermiso\n" +
+                    "FROM PUBLIC.\"Roles\" AS R\n" +
+                    "WHERE R.\"idUsuario\" = ${mapa.idUsuario}"
+
+             mapa.put("cantPermisos",sql.executeQueryAsMap(query).cantPermiso)
+
         }
 
         return mapa;

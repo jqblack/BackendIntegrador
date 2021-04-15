@@ -20,12 +20,14 @@ class UsuarioController {
     def insertUser(@RequestBody Map  data) {
 
         Map MapData = data
+        println(data);
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
 
-            if(usuarioService.InsertUser(MapData.nombre as String,MapData.apellido as String,MapData.sexo as int, MapData.user as String,MapData.pass as String,MapData.numCuenta as String)){
+            if(usuarioService.InsertUser(MapData.nombre as String,MapData.apellido as String,MapData.sexo as int, MapData.user as String,
+                    MapData.pass as String ,MapData.numCuenta as String, MapData.tipouser as Boolean)){
                 return MyCustomsRequests.MessageSuccess();
             }
             else{

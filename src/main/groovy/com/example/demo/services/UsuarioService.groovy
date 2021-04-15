@@ -12,7 +12,7 @@ class UsuarioService {
     @Autowired
     Sql sql
 
-    Boolean InsertUser(String nombre, String apellido, int sexo, String user, String pass,String numCuenta){
+    Boolean InsertUser(String nombre, String apellido, int sexo, String user, String pass,String numCuenta, Boolean isAdmin){
 
         String query = "  INSERT INTO \n" +
                 "  public.\"Persona\"\n" +
@@ -25,27 +25,57 @@ class UsuarioService {
                 "  '${nombre}',\n" +
                 "  '${apellido}',\n" +
                 "  ${sexo}\n" +
-                ") RETURNING IdPersona;"
+                ") RETURNING \"IdPersona\";"
         Map MapPersona = [:];
 
+
+
         MapPersona = sql.executeQueryAsMap(query);
+
+        println(MapPersona.get("IdPersona"))
+
         if(MapPersona != [:]){
-            query = "INSERT INTO \n" +
-                    "  public.\"Usuario\"\n" +
-                    "(\n" +
-                    "  \"userName\",\n" +
-                    "  password,\n" +
-                    "  \"IdPersona\",\n" +
-                    "  \"NumeroCuenta\",\n" +
-                    "  \"idStatusUsuario\"\n" +
-                    ")\n" +
-                    "VALUES (\n" +
-                    "  '${user}',\n" +
-                    "  '${pass}',\n" +
-                    "  ${MapPersona.IdPersona},\n" +
-                    "  '${numCuenta}',\n" +
-                    "  ${1}\n" +
-                    ");"
+
+            if(isAdmin) {
+                query = "INSERT INTO \n" +
+                        "  public.\"Usuario\"\n" +
+                        "(\n" +
+                        "  \"userName\",\n" +
+                        "  password,\n" +
+                        "  \"IdPersona\",\n" +
+                        "  \"NumeroCuenta\",\n" +
+                        "  \"idStatusUsuario\",\n" +
+                        "  \"isAdmin\"\n" +
+                        ")\n" +
+                        "VALUES (\n" +
+                        "  '${user}',\n" +
+                        "  '${pass}',\n" +
+                        "  ${MapPersona.IdPersona},\n" +
+                        "  '${numCuenta}',\n" +
+                        "  ${1}, ${true}\n" +
+                        ");"
+            }
+            else{
+                query = "INSERT INTO \n" +
+                        "  public.\"Usuario\"\n" +
+                        "(\n" +
+                        "  \"userName\",\n" +
+                        "  password,\n" +
+                        "  \"IdPersona\",\n" +
+                        "  \"NumeroCuenta\",\n" +
+                        "  \"idStatusUsuario\",\n" +
+                        "   \"IsClient\" \n" +
+                        ")\n" +
+                        "VALUES (\n" +
+                        "  '${user}',\n" +
+                        "  '${pass}',\n" +
+                        "  ${MapPersona.IdPersona},\n" +
+                        "  '${numCuenta}',\n" +
+                        "  ${1}, ${true}\n" +
+                        ");"
+            }
+
+            println(query)
 
             return sql.executeQueryInsertUpdate(query);
         }

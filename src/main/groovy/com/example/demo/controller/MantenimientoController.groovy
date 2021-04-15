@@ -26,7 +26,7 @@ class MantenimientoController {
 
             MapData = MapData.data;
 
-            if(mantenimientoService.Insert(MapData.descripcion as String, MapData.dias as int)){
+            if(mantenimientoService.Insert(MapData.descripcion as String, MapData.dias as int, MapData.listidResi as List)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -70,7 +70,7 @@ class MantenimientoController {
 
             MapData = MapData.data;
 
-            return mantenimientoService.GetMantenimientos(MapData.idresidencial as int)
+            return mantenimientoService.GetMantenimientos(MapData.idresi as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();

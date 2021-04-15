@@ -20,10 +20,9 @@ class LoginController {
     @RequestMapping(value="/login/iniciarsesion", method = RequestMethod.POST)
     def Login(@RequestBody Map  data) {
 
-        JsonSlurper parser = new JsonSlurper()
-        Map MapData = parser.parseText(data);
+        Map MapData = data
 
-        if(MapData.key1 == "ApiRandiel2021"){
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
 
