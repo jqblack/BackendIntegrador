@@ -16,7 +16,7 @@ class QuejasController {
 
     CustomRequest MyCustomsRequests = new CustomRequest();
 
-    @RequestMapping(value="/quejas/getquejas", method = RequestMethod.POST)
+    @RequestMapping(value="/quejas/getquejasbyresidencial", method = RequestMethod.POST)
     def Getmantenimientos(@RequestBody Map  data) {
 
         Map MapData = data
@@ -25,7 +25,7 @@ class QuejasController {
 
             MapData = MapData.data;
 
-            return quejasService.GetTiposQuejas(MapData.idresidencial as int)
+            return quejasService.GetTiposQuejas(MapData.idResi as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();
@@ -41,7 +41,7 @@ class QuejasController {
 
             MapData = MapData.data;
 
-            if(quejasService.Insert(MapData.descripcion as String,MapData.cantAdvertencia as int, MapData.limite as int, MapData.costo as int, MapData.diriguido as int, MapData.idresi as int)){
+            if(quejasService.Insert(MapData.descripcion as String,MapData.cantAdvertencia as int, MapData.limite as int, MapData.costo as int, MapData.diriguido as int, MapData.idResi as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

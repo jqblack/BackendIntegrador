@@ -70,7 +70,7 @@ class MantenimientoController {
 
             MapData = MapData.data;
 
-            return mantenimientoService.GetMantenimientos(MapData.idresi as int)
+            return mantenimientoService.GetMantenimientos(MapData.idResi as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();

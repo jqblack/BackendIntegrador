@@ -26,12 +26,13 @@ class LoginService {
         else{
             List listPermissions;
 
-            query = "SELECT R.*, TU.tipo, RE.nombre FROM PUBLIC.\"Roles\" AS R\n" +
+            query = "SELECT R.\"idTipo\" as value,\n" +
+                    "concat(RE.nombre,' - ',TU.tipo) as label FROM PUBLIC.\"Roles\" AS R\n" +
                     "INNER JOIN PUBLIC.\"TipoUsuario\" AS TU \n" +
                     "ON R.\"idTipo\" = TU.\"idTipoUsuario\"\n" +
                     "INNER JOIN PUBLIC.\"Residencial\" AS RE \n" +
                     "ON R.\"ID_residencial\" = RE.\"ID_residencial\"\n" +
-                    "WHERE R.\"idUsuario\" =  ${mapa.idUsuario}";
+                    "WHERE R.\"idUsuario\" = ${mapa.idUsuario}";
 
             listPermissions = sql.executeQueryAsList(query);
 

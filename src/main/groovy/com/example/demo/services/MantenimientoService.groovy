@@ -66,13 +66,16 @@ class MantenimientoService {
         String query = "SELECT \n" +
                 "  MR.\"idMatenimiento\",\n" +
                 "  MR.\"idResidencial\",\n" +
-                "  M.\"Descripcion\"\n" +
+                "  M.*\n" +
                 "FROM \n" +
                 "  public.\"MantenimientovsResidencial\" AS MR\n" +
                 "  INNER JOIN PUBLIC.\"Residencial\" AS R \n" +
-                "  ON R.\"ID_residencial\" = ${idResi}\n" +
+                "  ON R.\"ID_residencial\" = MR.\"idResidencial\" \n" +
                 "  INNER JOIN PUBLIC.\"MantenimientoArea\" AS M\n" +
-                "  ON M.\"ID_TipoMantenimiento\" = MR.\"idMatenimiento\" "
+                "  ON M.\"ID_TipoMantenimiento\" = MR.\"idMatenimiento\" \n" +
+                "  WHERE R.\"ID_residencial\" = ${idResi}"
+
+        print(query)
 
         return sql.executeQueryAsList(query);
     }
