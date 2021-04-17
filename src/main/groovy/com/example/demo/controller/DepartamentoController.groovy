@@ -72,4 +72,21 @@ class DepartamentoController {
             return MyCustomsRequests.TokenNoValido();
         }
     }
+
+    @RequestMapping(value="/departamento/listaInquilinos", method = RequestMethod.POST)
+    def listaInquilinos(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            return departamentoService.listaInquilinos(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+
 }

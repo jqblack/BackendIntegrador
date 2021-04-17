@@ -74,4 +74,19 @@ class DepartamentoService {
         return sql.executeQueryInsertUpdate(query)
     }
 
+    List listaInquilinos(int idResi){
+        String query = "SELECT \n" +
+                "I.*,\n" +
+                "D.\"Nombre_departamento\",\n" +
+                "CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
+                "FROM PUBLIC.\"Inquilino\" AS I \n" +
+                "INNER JOIN PUBLIC.\"Departamentos\" AS D\n" +
+                "ON I.\"ID_deparamento\" = D.\"ID_departamento\"\n" +
+                "INNER JOIN public.\"Persona\" AS P\n" +
+                "ON I.\"idPersona\" = P.\"IdPersona\"\n" +
+                "WHERE I.\"idResidencial\" = ${idResi}"
+
+        return sql.executeQueryAsList(query)
+    }
+
 }

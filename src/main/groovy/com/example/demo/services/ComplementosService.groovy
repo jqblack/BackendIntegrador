@@ -68,20 +68,73 @@ class ComplementosService {
         return sql.executeQueryInsertUpdate(query)
     }
 
-    Boolean InsertSolicitud(int idUser, int idDepart){
-        String query = "INSERT INTO \n" +
+    List listaSolicitudes(int idResi){
+        String query = "SELECT \n" +
+                "SC.*,\n" +
+                "D.\"Nombre_departamento\",\n" +
+                "CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
+                "FROM PUBLIC.\"SolicitudCompra\" AS SC\n" +
+                "INNER JOIN PUBLIC.\"Departamentos\" AS D\n" +
+                "ON SC.\"ID_departamento\" = D.\"ID_departamento\"\n" +
+                "INNER JOIN PUBLIC.\"Usuario\" AS U\n" +
+                "ON SC.\"ID_usuario\" = U.\"idUsuario\"\n" +
+                "INNER JOIN PUBLIC.\"Persona\" AS P \n" +
+                "ON U.\"IdPersona\" = P.\"IdPersona\"\n" +
+                "WHERE SC.\"Activo\" = TRUE AND SC.\"idResidencial\" = ${idResi}"
+
+        return sql.executeQueryAsList(query)
+    }
+
+    Boolean InsertSolicitud(int idUser, int idDepart, int idResi, Boolean isCompra){
+                query = "INSERT INTO \n" +
                 "  public.\"SolicitudCompra\"\n" +
                 "(\n" +
                 "  \"ID_usuario\",\n" +
-                "  fecha,\n" +
-                "  \"ID_departamento\"\n" +
+                "  \"ID_departamento\",\n" +
+                "  \"idResidencial\",\n" +
+                "  \"isCompra\"\n" +
                 ")\n" +
                 "VALUES (\n" +
                 "  ${idUser},\n" +
-                "  now(),\n" +
-                "  ${idDepart}\n" +
+                "  ${idDepart},\n" +
+                "  ${idResi},\n" +
+                "  ${isCompra}\n" +
                 ");"
 
         return sql.executeQueryInsertUpdate(query)
+    }
+
+    List ListaEmpleado(int idResi){
+        String query = "SELECT \n" +
+                "  ER.*,\n" +
+                "  CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
+                "FROM \n" +
+                "  public.\"EmpleadosvsResidencial\"  as ER\n" +
+                "  INNER JOIN PUBLIC.\"Usuario\" AS U\n" +
+                "  ON ER.\"idUsuario\" = U.\"idUsuario\"\n" +
+                "  INNER JOIN PUBLIC.\"Persona\" AS P\n" +
+                "  ON U.\"IdPersona\" = P.\"IdPersona\"\n" +
+                "  WHERE ER.activo = TRUE AND ER.\"idResidencial\" = ${idResi}"
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
+    List getSolicitudesEmpleados(int idResi){
+        String query = "  SELECT \n" +
+                "  SE.*,\n" +
+                "  CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
+                "  FROM \n" +
+                "  PUBLIC.\"SolicitudEmpleados\" AS SE\n" +
+                "  INNER JOIN PUBLIC.\"Persona\" AS P\n" +
+                "  ON SE.\"idPersona\" = P.\"IdPersona\"\n" +
+                "  WHERE SE.activo = TRUE AND SE.\"idResidencial\" = ${idResi}"
+
+        return sql.executeQueryAsList(query);
+    }
+
+    List TareasPendientes(){
+        String query = ""
+
+        return sql.executeQueryAsList(query)
     }
 }

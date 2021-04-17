@@ -89,6 +89,23 @@ class ComplementosController {
         }
     }
 
+
+    @RequestMapping(value="/complementos/listasolicitud", method = RequestMethod.POST)
+    def listasolicitud(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return complementosService.listaSolicitudes(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/complementos/insertsolicitud", method = RequestMethod.POST)
     def InsertSolicitud(@RequestBody Map  data) {
 
@@ -98,7 +115,7 @@ class ComplementosController {
 
             MapData = MapData.data;
 
-            if(complementosService.InsertSolicitud(MapData.idUser as int, MapData.idDepar as int)){
+            if(complementosService.InsertSolicitud(MapData.idUser as int, MapData.idDepar as int, MapData.idResi as int, MapData.iscompra as Boolean)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -110,4 +127,37 @@ class ComplementosController {
             return MyCustomsRequests.TokenNoValido();
         }
     }
+
+    @RequestMapping(value="/complementos/getempleados", method = RequestMethod.POST)
+    def getempleados(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return complementosService.ListaEmpleado(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/complementos/getsolicitudesempleados", method = RequestMethod.POST)
+    def getsolicitudesempleados(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return complementosService.getSolicitudesEmpleados(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
 }

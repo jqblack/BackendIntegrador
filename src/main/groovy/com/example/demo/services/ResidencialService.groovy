@@ -24,6 +24,8 @@ class ResidencialService {
                 "  \"ID_status\"\n" +
                 "FROM \n" +
                 "  public.\"Residencial\" ;";
+
+
         return sql.executeQueryAsList(query);
     }
 

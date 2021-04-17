@@ -20,6 +20,8 @@ class TorreService {
                 "FROM \n" +
                 "  public.\"Torre\" as T where T.\"ID_residencial\" = ${idresi}"
 
+        println(query)
+
         return sql.executeQueryAsList(query)
     }
 
