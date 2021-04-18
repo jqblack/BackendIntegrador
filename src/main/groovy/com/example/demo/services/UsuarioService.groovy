@@ -105,7 +105,55 @@ class UsuarioService {
         return sql.executeQueryAsList(query)
     }
 
+    List GetCuentaCobrar(int idUser){
+        List ListaCuenta = [];
 
+        String query = "SELECT \n" +
+                "CC.*\n" +
+                "FROM \n" +
+                "PUBLIC.\"CuentaPorCobrar\" AS CC\n" +
+                "WHERE CC.pagado = FALSE AND \n" +
+                "CC.\"Idusuario\" = ${idUser}"
+
+        List lista = sql.executeQueryAsList(query)
+
+        for (int i = 0; i < lista.size(); i++) {
+            if (lista[i].IdTipoCuentaxCobrar == 1){
+
+                query = "SELECT \n" +
+                        "CC.*,\n" +
+                        "S.\"Descripcion\" AS definicion\n" +
+                        "FROM \n" +
+                        "PUBLIC.\"CuentaPorCobrar\" AS CC\n" +
+                        "INNER JOIN PUBLIC.\"Servicios\" AS S\n" +
+                        "ON CC.\"IdReferencia\" = S.\"ID_servicio\" "+
+                        "WHERE CC.pagado = FALSE AND \n" +
+                        "CC.\"Idusuario\" = ${idUser}\n" +
+                        "AND CC.\"IdReferencia\" = ${lista[i].IdReferencia}\n" +
+                        "AND CC.fecha = '${lista[i].fecha}'"
+
+                ListaCuenta  += sql.executeQueryAsMap(query)
+            }
+            else{
+                query = "SELECT \n" +
+                        "CC.*,\n" +
+                        "Q.\"Descripcion\" AS definicion\n" +
+                        "FROM \n" +
+                        "PUBLIC.\"CuentaPorCobrar\" AS CC\n" +
+                        "INNER JOIN PUBLIC.\"TipoQuejas\" AS Q\n" +
+                        "ON CC.\"IdReferencia\" = Q.\"ID_TipoQuejas\" "+
+                "WHERE CC.pagado = FALSE AND \n" +
+                        "CC.\"Idusuario\" = ${idUser}\n" +
+                        "AND CC.\"IdReferencia\" = ${lista[i].IdReferencia}\n" +
+                        "AND CC.fecha = '${lista[i].fecha}'"
+                println(query)
+                ListaCuenta += sql.executeQueryAsMap(query)
+            }
+
+        }
+
+        return ListaCuenta
+    }
 
 
 }

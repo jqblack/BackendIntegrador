@@ -1,9 +1,98 @@
 package com.example.demo.services
 
 import com.example.demo.database.Sql
+import org.apache.tomcat.util.descriptor.web.Injectable
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+
+@Configuration
+@EnableScheduling
+@Service
+@Transactional
+@ConditionalOnProperty(name = "scheduling.enabled", matchIfMissing = true)
+class Test{
+    @Autowired
+    Sql sql
+
+    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT15H")
+    public void TriggerCuentasPorCobrar() throws InterruptedException{
+
+        String query = " SELECT \n" +
+                " *\n" +
+                " FROM PUBLIC.\"Departamentos\" AS D\n" +
+                " WHERE D.\"Disponible\" = TRUE";
+
+        List lisaDepartamentos = sql.executeQueryAsList(query)
+
+        if(lisaDepartamentos.size() > 0){
+
+            for (int i = 0; i < lisaDepartamentos.size(); i++) {
+
+                query = " SELECT \n" +
+                        " *\n" +
+                        " FROM PUBLIC.\"DepartamentoVsServicos\" AS DS\n" +
+                        " WHERE DS.\"ID_Departamento\" = ${lisaDepartamentos[i].ID_departamento}"
+
+                List serviciosDepartamentos = sql.executeQueryAsList(query)
+
+                query = " SELECT \n" +
+                        "  UD.*\n" +
+                        "FROM \n" +
+                        "  public.\"UsuarioVsDepartamento\" AS UD\n" +
+                        "  WHERE UD.\"idDepartamento\" = ${lisaDepartamentos[i].ID_departamento}"
+
+                Map mapaUser = sql.executeQueryAsMap(query)
+
+                for (int j = 0; j < serviciosDepartamentos.size(); j++) {
+
+                    query = "SELECT \n" +
+                            "  \"ID_servicio\",\n" +
+                            "  \"Descripcion\",\n" +
+                            "  cobro,\n" +
+                            "  pago,\n" +
+                            "  \"idResidencial\"\n" +
+                            "FROM \n" +
+                            "  public.\"Servicios\" AS S \n" +
+                            "  WHERE S.\"ID_servicio\" = ${serviciosDepartamentos[j].ID_servicio}"
+
+                    Map mapaServicio = sql.executeQueryAsMap(query)
+
+
+                    query = "  INSERT INTO \n" +
+                            "  public.\"CuentaPorCobrar\"\n" +
+                            "(\n" +
+                            "  \"Idusuario\",\n" +
+                            "  \"IdReferencia\",\n" +
+                            "  \"IdTipoCuentaxCobrar\",\n" +
+                            "  monto\n" +
+                            ")\n" +
+                            "VALUES (\n" +
+                            "  ${mapaUser.idUser},\n" +
+                            "  ${mapaServicio.ID_servicio},\n" +
+                            "  ${1},\n" +
+                            "  ${mapaServicio.cobro}\n" +
+                            ");"
+
+                    sql.executeQueryInsertUpdate(query)
+                }
+
+                println("Residencial "+i+1+" done")
+            }
+
+        }
+
+
+    }
+}
+
+
+
 
 @Service
 @Transactional
@@ -11,6 +100,7 @@ class ComplementosService {
 
     @Autowired
     Sql sql
+
 
     List Get_Provincias(){
 
@@ -34,7 +124,7 @@ class ComplementosService {
         
         List lisaDepartamentos = sql2.executeQueryAsList(query)
         
-        /*if(lisaDepartamentos.size() > 0){
+        if(lisaDepartamentos.size() > 0){
 
             for (int i = 0; i < lisaDepartamentos.size(); i++) {
 
@@ -88,7 +178,7 @@ class ComplementosService {
 
             }
 
-        }*/
+        }
 
     }
 

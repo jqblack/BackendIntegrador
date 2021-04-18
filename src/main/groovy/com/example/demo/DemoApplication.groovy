@@ -35,17 +35,15 @@ class DemoApplication {
 
     //LA VAINA
 
-    ComplementosController complementosController = new ComplementosController()
+    //ComplementosController complementosController = new ComplementosController()
 
-    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT5S")
-    public void TareaProgramada() throws InterruptedException{
-        //complementosController.Ejecturar()
-    }
+//    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT5S")
+//    public void TareaProgramada() throws InterruptedException{
+//        complementosController.Ejecturar()
+//    }
 
 
-    @Configuration
-    @EnableScheduling
-    @ConditionalOnProperty(name = "scheduling.enabled", matchIfMissing = true)
+
     @EnableWebMvc
     public class WebConfig extends WebMvcConfigurerAdapter {
 
@@ -56,8 +54,18 @@ class DemoApplication {
         }
     }
 
+    @Configuration
+    @EnableScheduling
+    @ConditionalOnProperty(name = "scheduling.enabled", matchIfMissing = true)
     class SchedulingConfiguration{
 
+//        @Scheduled(initialDelay = 1000L, fixedDelayString = "PT5S")
+//        public void TareaProgramada() throws InterruptedException{
+//
+//            ComplementosService complementosService
+//
+//            complementosService.ExecuteTrigger()
+//        }
     }
 
 }

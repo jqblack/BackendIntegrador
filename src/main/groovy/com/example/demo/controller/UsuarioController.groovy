@@ -69,5 +69,21 @@ class UsuarioController {
         }
     }
 
+    @RequestMapping(value="/usuario/cuentaxcobrar", method = RequestMethod.POST)
+    def cuentaxcobrar(@RequestBody Map  data) {
+
+        Map MapData = data
+        println(data);
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return usuarioService.GetCuentaCobrar(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
 
 }
