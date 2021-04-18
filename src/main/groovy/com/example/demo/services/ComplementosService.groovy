@@ -23,6 +23,75 @@ class ComplementosService {
         return sql.executeQueryAsList(query);
     }
 
+     public void ExecuteTrigger(){
+
+        Sql sql2 = new Sql()
+
+        String query = " SELECT \n" +
+                " *\n" +
+                " FROM PUBLIC.\"Departamentos\" AS D\n" +
+                " WHERE D.\"Disponible\" = TRUE";
+        
+        List lisaDepartamentos = sql2.executeQueryAsList(query)
+        
+        /*if(lisaDepartamentos.size() > 0){
+
+            for (int i = 0; i < lisaDepartamentos.size(); i++) {
+
+                query = " SELECT \n" +
+                        " *\n" +
+                        " FROM PUBLIC.\"DepartamentoVsServicos\" AS DS\n" +
+                        " WHERE DS.\"ID_Departamento\" = ${lisaDepartamentos[i].ID_departamento}"
+
+                List serviciosDepartamentos = sql.executeQueryAsList(query)
+
+                query = " SELECT \n" +
+                        "  UD.*\n" +
+                        "FROM \n" +
+                        "  public.\"UsuarioVsDepartamento\" AS UD\n" +
+                        "  WHERE UD.\"idDepartamento\" = ${lisaDepartamentos[i].ID_departamento}"
+
+                Map mapaUser = sql.executeQueryAsMap(query)
+
+                for (int j = 0; j < serviciosDepartamentos.size(); j++) {
+
+                    query = "SELECT \n" +
+                            "  \"ID_servicio\",\n" +
+                            "  \"Descripcion\",\n" +
+                            "  cobro,\n" +
+                            "  pago,\n" +
+                            "  \"idResidencial\"\n" +
+                            "FROM \n" +
+                            "  public.\"Servicios\" AS S \n" +
+                            "  WHERE S.\"ID_servicio\" = ${serviciosDepartamentos[j].ID_servicio}"
+
+                    Map mapaServicio = sql.executeQueryAsMap(query)
+
+
+                    query = "  INSERT INTO \n" +
+                            "  public.\"CuentaPorCobrar\"\n" +
+                            "(\n" +
+                            "  \"Idusuario\",\n" +
+                            "  \"IdReferencia\",\n" +
+                            "  \"IdTipoCuentaxCobrar\",\n" +
+                            "  monto\n" +
+                            ")\n" +
+                            "VALUES (\n" +
+                            "  ${mapaUser.idUser},\n" +
+                            "  ${mapaServicio.ID_servicio},\n" +
+                            "  ${1},\n" +
+                            "  ${mapaServicio.cobro}\n" +
+                            ");"
+
+                    sql.executeQueryInsertUpdate(query)
+                }
+
+            }
+
+        }*/
+
+    }
+
     List Get_Municipio(){
 
         String query = "  SELECT \n" +
@@ -132,9 +201,52 @@ class ComplementosService {
         return sql.executeQueryAsList(query);
     }
 
-    List TareasPendientes(){
-        String query = ""
+    Boolean InsertSolicitudEmpleados(int idUser, int idResi, int idPerso){
+        String query = "INSERT INTO \n" +
+                "  public.\"SolicitudEmpleados\"\n" +
+                "(\n" +
+                "  \"idUser\",\n" +
+                "  \"idResidencial\",\n" +
+                "  \"idPersona\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idUser},\n" +
+                "  ${idResi},\n" +
+                "  ${idPerso}\n" +
+                ");"
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
+    List TareasPendientes(int idUser){
+        String query = "SELECT \n" +
+                "  AC.*,\n" +
+                "  M.\"Descripcion\" AS mantenimiento\n" +
+                "FROM \n" +
+                "  public.\"AreaComunpendientesbyUsuarios\" AS AC\n" +
+                "  INNER JOIN PUBLIC.\"MantenimientoArea\" AS M \n" +
+                "  ON AC.\"idMantenimiento\" = M.\"ID_TipoMantenimiento\"\n" +
+                "  WHERE AC.activo = TRUE AND AC.\"idUsuario\" = ${idUser}"
 
         return sql.executeQueryAsList(query)
+    }
+
+    Boolean InsertTarea(int idArea, int idUser, int idMant, Date fecha){
+        String query = "INSERT INTO \n" +
+                "  public.\"AreaComunpendientesbyUsuarios\"\n" +
+                "(\n" +
+                "  id_areacomun,\n" +
+                "  \"idUsuario\",\n" +
+                "  \"idMantenimiento\",\n" +
+                "  \"fechaMantenimiento\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idArea},\n" +
+                "  ${idUser},\n" +
+                "  ${idMant},\n" +
+                "  to_date(to_char('${fecha}'::DATE,'dd/mm/yyyy'),'dd/mm/yyyy')\n" +
+                ");  "
+
+        return sql.executeQueryInsertUpdate(query)
     }
 }

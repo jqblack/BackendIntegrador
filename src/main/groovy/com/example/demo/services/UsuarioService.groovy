@@ -12,19 +12,19 @@ class UsuarioService {
     @Autowired
     Sql sql
 
-    Boolean InsertUser(String nombre, String apellido, int sexo, String user, String pass,String numCuenta, Boolean isAdmin){
+    Boolean InsertUser(String nombre, String apellido, int sexo, String user, String pass,String numCuenta, Boolean isAdmin, String phone){
 
         String query = "  INSERT INTO \n" +
                 "  public.\"Persona\"\n" +
                 "(\n" +
                 "  \"Nombre\",\n" +
                 "  \"Apellido\",\n" +
-                "  \"ID_Sexo\"\n" +
+                "  \"ID_Sexo\" , celular\n" +
                 ")\n" +
                 "VALUES (\n" +
                 "  '${nombre}',\n" +
                 "  '${apellido}',\n" +
-                "  ${sexo}\n" +
+                "  ${sexo} , '${phone}'\n" +
                 ") RETURNING \"IdPersona\";"
         Map MapPersona = [:];
 

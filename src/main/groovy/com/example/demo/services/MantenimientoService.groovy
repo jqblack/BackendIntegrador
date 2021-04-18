@@ -51,10 +51,11 @@ class MantenimientoService {
         }
     }
 
-    Boolean Update(int idMante, int CantDias){
+    Boolean Update(int idMante, int CantDias, String des){
         String sql = "UPDATE \n" +
                 "  public.\"MantenimientoArea\" \n" +
                 "SET \n" +
+                "  \"Descripcion\" = '${des}',\n" +
                 "  \"cantidadDias\" = ${CantDias}\n" +
                 "WHERE \n" +
                 "  \"ID_TipoMantenimiento\" = ${idMante}\n" +

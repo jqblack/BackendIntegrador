@@ -48,7 +48,7 @@ class MantenimientoController {
 
             MapData = MapData.data;
 
-            if(mantenimientoService.Update(MapData.idMantenimiento as int, MapData.dias as int)){
+            if(mantenimientoService.Update(MapData.idMantenimiento as int, MapData.dias as int, MapData.descri as String)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

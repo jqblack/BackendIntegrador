@@ -3,10 +3,15 @@ package com.example.demo.controller
 import com.example.demo.Utilidades.CustomRequest
 import com.example.demo.services.ComplementosService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
+import org.springframework.scheduling.annotation.EnableScheduling
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestMethod
 import org.springframework.web.bind.annotation.RestController
+
+import java.text.SimpleDateFormat
 
 @RestController
 class ComplementosController {
@@ -68,7 +73,7 @@ class ComplementosController {
     }
 
     @RequestMapping(value="/complementos/calificar", method = RequestMethod.POST)
-    def updateMantenimiento(@RequestBody Map  data) {
+    def calificar(@RequestBody Map  data) {
 
         Map MapData = data
 
@@ -159,5 +164,87 @@ class ComplementosController {
             return MyCustomsRequests.TokenNoValido();
         }
     }
+
+    @RequestMapping(value="/complementos/insertsolicitudempleado", method = RequestMethod.POST)
+    def insertsolicitudempleado(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(complementosService.InsertSolicitudEmpleados(MapData.idUser as int, MapData.idResi as int, MapData.idPersona as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/complementos/tareaspendientes", method = RequestMethod.POST)
+    def tareaspendientes(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return complementosService.TareasPendientes(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/complementos/insertartarea", method = RequestMethod.POST)
+    def insertartarea(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+            SimpleDateFormat sdformat = new SimpleDateFormat("dd/MM/yyyy");
+            Date dt = sdformat.parse(MapData.fecha as String);
+            println (dt)
+
+
+            if(complementosService.InsertTarea(MapData.idArea as int, MapData.idUser as int, MapData.idMant as int, dt)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    public Ejecturar() {
+        ComplementosService complemento = new ComplementosService()
+
+        complemento.ExecuteTrigger()
+
+    }
+
+
+//    @ConditionalOnProperty(name = "scheduling.enabled", matchIfMissing = true)
+//
+//    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT5S")
+//    public void TareaProgramada() throws InterruptedException{
+//
+//        ComplementosService comple = new ComplementosService()
+//
+//        comple.ExecuteTrigger()
+//    }
 
 }

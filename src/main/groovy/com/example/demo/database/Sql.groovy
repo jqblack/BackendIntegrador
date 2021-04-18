@@ -9,7 +9,7 @@ class Sql {
     @Autowired
     JdbcTemplate template
 
-    List<Map<String, Object>> executeQueryAsList(String sql) {
+     List<Map<String, Object>> executeQueryAsList(String sql) {
         try {
             return template.queryForList(sql)
         } catch (Exception e) {

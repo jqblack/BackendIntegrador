@@ -2,6 +2,7 @@ package com.example.demo.controller
 
 import com.example.demo.Utilidades.CustomRequest
 import com.example.demo.services.UsuarioService
+import com.sun.javafx.collections.MappingChange
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -27,7 +28,7 @@ class UsuarioController {
             MapData = MapData.data;
 
             if(usuarioService.InsertUser(MapData.nombre as String,MapData.apellido as String,MapData.sexo as int, MapData.user as String,
-                    MapData.pass as String ,MapData.numCuenta as String, MapData.tipouser as Boolean)){
+                        MapData.pass as String ,MapData.numCuenta as String, MapData.tipouser as Boolean, MapData.cel as String)){
                 return MyCustomsRequests.MessageSuccess();
             }
             else{

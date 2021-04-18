@@ -63,8 +63,7 @@ class residencial {
     @RequestMapping(value="/residencial/update", method = RequestMethod.POST)
     def UpdateResidencial(@RequestBody Map  data) {
 
-        JsonSlurper parser = new JsonSlurper()
-        Map MapData = parser.parseText(data);
+        Map MapData = (data);
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
