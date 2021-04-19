@@ -26,13 +26,13 @@ class SolicitudService {
                 "INNER JOIN PUBLIC.\"Provincia\" AS P\n" +
                 "ON R.\"ID_provincia\" = P.\"ID_provincia\" WHERE D.\"Disponible\" = TRUE\n" +
                 "LIMIT 12"
-
+        print(query)
         return sql.executeQueryAsList(query)
     }
 
     List getFilterList(int idPro, int precio){
         String query = "SELECT \n" +
-                "R.nombre as nombreResi,\n" +
+                "R.nombre ,\n" +
                 "R.\"ID_residencial\" AS idResi,\n" +
                 "P.descripcion AS nomProvincia,\n" +
                 "D.*\n" +
@@ -46,7 +46,7 @@ class SolicitudService {
                 "WHERE D.\"Disponible\" = TRUE\n" +
                 "AND R.\"ID_provincia\" = ${idPro} AND D.\"PrecioAlquiler\" <= ${precio}"
 
-        retun sql.executeQueryAsList(query)
+        return sql.executeQueryAsList(query)
     }
 
 }

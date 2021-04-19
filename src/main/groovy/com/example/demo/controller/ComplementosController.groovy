@@ -120,7 +120,16 @@ class ComplementosController {
 
             MapData = MapData.data;
 
-            if(complementosService.InsertSolicitud(MapData.idUser as int, MapData.idDepar as int, MapData.idResi as int, MapData.iscompra as Boolean)){
+
+            Boolean isCompra;
+            if(MapData.iscompra as int == 2){
+                isCompra = true;
+            }
+            else{
+                isCompra = false
+            }
+
+            if(complementosService.InsertSolicitud(MapData.idUser as int, MapData.idDepar as int, MapData.idResi as int, isCompra)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -174,7 +183,7 @@ class ComplementosController {
 
             MapData = MapData.data;
 
-            if(complementosService.InsertSolicitudEmpleados(MapData.idUser as int, MapData.idResi as int, MapData.idPersona as int)){
+            if(complementosService.InsertSolicitudEmpleados(MapData.idUser as int, MapData.idResi as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }
@@ -229,11 +238,26 @@ class ComplementosController {
         }
     }
 
-    public Ejecturar() {
-        ComplementosService complemento = new ComplementosService()
+    @RequestMapping(value="/complementos/insertinquilinos", method = RequestMethod.POST)
+    def insertinquilinos(@RequestBody Map  data) {
 
-        complemento.ExecuteTrigger()
+        Map MapData = data
 
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(complementosService.InsertInquilino(MapData.idUser as int, MapData.idDepart as int, MapData.nomDepartamento as String, MapData.idResi as int, MapData.idPerso as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
     }
 
 

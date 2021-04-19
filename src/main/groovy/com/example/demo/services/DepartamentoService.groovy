@@ -108,10 +108,10 @@ class DepartamentoService {
 
     List ServiciosDepartamentos(int idDepart){
         String query = "SELECT \n" +
-                "  \"ID_servicio\",\n" +
-                "  \"ID_Departamento\"\n" +
+                "  DS.\"ID_servicio\",\n" +
+                "  DS.\"ID_Departamento\", S.\"Descripcion\" AS nombre\n" +
                 "FROM \n" +
-                "  public.\"DepartamentoVsServicos\"  AS DS\n" +
+                "  public.\"DepartamentoVsServicos\"  AS DS INNER JOIN PUBLIC.\"Servicios\" AS S ON DS.\"ID_servicio\" = S.\"ID_servicio\" \n" +
                 "  WHERE ds.\"ID_Departamento\" = ${idDepart}"
 
         return sql.executeQueryAsList(query)

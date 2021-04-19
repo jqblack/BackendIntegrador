@@ -23,7 +23,6 @@ class SolicitudController {
 
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
             MapData = MapData.data;
-
             return solicitudService.getfirstlist()
         }
         else{

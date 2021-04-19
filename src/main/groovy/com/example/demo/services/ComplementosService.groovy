@@ -92,7 +92,7 @@ class Test{
 
     }
 
-    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT15H")
+    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT5S")
     public void TriggerAreasComunes() throws InterruptedException{
 
         String query = "SELECT \n" +
@@ -122,7 +122,27 @@ class Test{
 
                 sql.executeQueryInsertUpdate(query)
 
-                query = ""
+                query = "SELECT \n" +
+                        "  M.*\n" +
+                        "FROM \n" +
+                        "  public.\"MantenimientoArea\" AS M\n" +
+                        "  WHERE M.\"ID_TipoMantenimiento\" = ${listaAreasToday[i].id_TipoMantenimiento}"
+
+                Map mapaMantenimiento = sql.executeQueryAsMap(query)
+
+                query = "UPDATE \n" +
+                        "  public.\"AreasComunesVsMantenimientos\" \n" +
+                        "SET \n" +
+                        "  \"fechaProgramada\" = current_date+${mapaMantenimiento.cantidadDias}\n" +
+                        "WHERE \n" +
+                        " id_areacomun = ${listaAreasToday[i].id_areacomun} AND \n" +
+                        "  \"id_TipoMantenimiento\" = ${listaAreasToday[i].id_TipoMantenimiento} AND \n" +
+                        "  \"idUsuarioDefault\" = ${listaAreasToday[i].idUsuarioDefault}\n" +
+                        ";"
+
+                sql.executeQueryInsertUpdate(query)
+                println("Cambie")
+
             }
         }
 
@@ -131,8 +151,6 @@ class Test{
 
 
 }
-
-
 
 
 @Service
@@ -271,7 +289,7 @@ class ComplementosService {
     List listaSolicitudes(int idResi){
         String query = "SELECT \n" +
                 "SC.*,\n" +
-                "D.\"Nombre_departamento\",\n" +
+                "D.\"Nombre_departamento\", P.*, \n" +
                 "CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
                 "FROM PUBLIC.\"SolicitudCompra\" AS SC\n" +
                 "INNER JOIN PUBLIC.\"Departamentos\" AS D\n" +
@@ -286,7 +304,7 @@ class ComplementosService {
     }
 
     Boolean InsertSolicitud(int idUser, int idDepart, int idResi, Boolean isCompra){
-                query = "INSERT INTO \n" +
+                String query = "INSERT INTO \n" +
                 "  public.\"SolicitudCompra\"\n" +
                 "(\n" +
                 "  \"ID_usuario\",\n" +
@@ -332,20 +350,18 @@ class ComplementosService {
         return sql.executeQueryAsList(query);
     }
 
-    Boolean InsertSolicitudEmpleados(int idUser, int idResi, int idPerso){
+    Boolean InsertSolicitudEmpleados(int idUser, int idResi){
         String query = "INSERT INTO \n" +
                 "  public.\"SolicitudEmpleados\"\n" +
                 "(\n" +
                 "  \"idUser\",\n" +
-                "  \"idResidencial\",\n" +
-                "  \"idPersona\"\n" +
+                "  \"idResidencial\"\n" +
                 ")\n" +
                 "VALUES (\n" +
                 "  ${idUser},\n" +
-                "  ${idResi},\n" +
-                "  ${idPerso}\n" +
+                "  ${idResi}\n" +
                 ");"
-
+println(query)
         return sql.executeQueryInsertUpdate(query)
     }
 
@@ -377,6 +393,27 @@ class ComplementosService {
                 "  ${idMant},\n" +
                 "  to_date(to_char('${fecha}'::DATE,'dd/mm/yyyy'),'dd/mm/yyyy')\n" +
                 ");  "
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
+    Boolean InsertInquilino(int idUser, int idDepart, String nomDepart, int idResi, int idPerso){
+        String query = "INSERT INTO \n" +
+                "  public.\"Inquilino\"\n" +
+                "(\n" +
+                "  \"ID_usuario\",\n" +
+                "  \"ID_deparamento\",\n" +
+                "  \"Nombre_departamento\",\n" +
+                "  \"idResidencial\",\n" +
+                "  \"idPersona\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idUser},\n" +
+                "  ${idDepart},\n" +
+                "  '${nomDepart}',\n" +
+                "  ${idResi},\n" +
+                "  ${idPerso}\n" +
+                ");"
 
         return sql.executeQueryInsertUpdate(query)
     }
