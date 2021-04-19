@@ -20,13 +20,13 @@ class Test{
     @Autowired
     Sql sql
 
-    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT15H")
+    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT12H")
     public void TriggerCuentasPorCobrar() throws InterruptedException{
 
         String query = " SELECT \n" +
                 " *\n" +
                 " FROM PUBLIC.\"Departamentos\" AS D\n" +
-                " WHERE D.\"Disponible\" = TRUE";
+                " WHERE D.\"Disponible\" = FALSE";
 
         List lisaDepartamentos = sql.executeQueryAsList(query)
 
@@ -44,8 +44,10 @@ class Test{
                 query = " SELECT \n" +
                         "  UD.*\n" +
                         "FROM \n" +
-                        "  public.\"UsuarioVsDepartamento\" AS UD\n" +
-                        "  WHERE UD.\"idDepartamento\" = ${lisaDepartamentos[i].ID_departamento}"
+                        "  public.\"UsuarioVsDepartamento\" AS UD" +
+                        " INNER JOIN PUBLIC.\"Departamentos\" AS D ON UD.\"idDepartamento\" = D.\"ID_departamento\" \n" +
+                        "  WHERE D.\"Disponible\" = FALSE AND UD.\"idDepartamento\" = ${lisaDepartamentos[i].ID_departamento}"
+
 
                 Map mapaUser = sql.executeQueryAsMap(query)
 
@@ -89,6 +91,45 @@ class Test{
 
 
     }
+
+    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT15H")
+    public void TriggerAreasComunes() throws InterruptedException{
+
+        String query = "SELECT \n" +
+                "  AM.*\n" +
+                "FROM \n" +
+                "  public.\"AreasComunesVsMantenimientos\" AM\n" +
+                "  WHERE AM.\"fechaProgramada\" = current_date"
+
+        List listaAreasToday = sql.executeQueryAsList(query)
+
+        if(listaAreasToday.size() > 0){
+
+            for (int i = 0; i < listaAreasToday.size(); i++) {
+
+                query = "  INSERT INTO \n" +
+                        "  public.\"AreaComunpendientesbyUsuarios\"\n" +
+                        "(\n" +
+                        "  id_areacomun,\n" +
+                        "  \"idUsuario\",\n" +
+                        "  \"idMantenimiento\"\n" +
+                        ")\n" +
+                        "VALUES (\n" +
+                        "  ${listaAreasToday[i].id_areacomun},\n" +
+                        "  ${listaAreasToday[i].idUsuarioDefault},\n" +
+                        "  ${listaAreasToday[i].id_TipoMantenimiento}\n" +
+                        ");"
+
+                sql.executeQueryInsertUpdate(query)
+
+                query = ""
+            }
+        }
+
+
+    }
+
+
 }
 
 

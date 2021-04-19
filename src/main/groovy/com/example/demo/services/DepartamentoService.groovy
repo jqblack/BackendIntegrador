@@ -75,18 +75,103 @@ class DepartamentoService {
     }
 
     List listaInquilinos(int idResi){
-        String query = "SELECT \n" +
-                "I.*,\n" +
-                "D.\"Nombre_departamento\",\n" +
-                "CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
-                "FROM PUBLIC.\"Inquilino\" AS I \n" +
-                "INNER JOIN PUBLIC.\"Departamentos\" AS D\n" +
-                "ON I.\"ID_deparamento\" = D.\"ID_departamento\"\n" +
-                "INNER JOIN public.\"Persona\" AS P\n" +
-                "ON I.\"idPersona\" = P.\"IdPersona\"\n" +
-                "WHERE I.\"idResidencial\" = ${idResi}"
+//        String query = "SELECT \n" +
+//                "I.*,\n" +
+//                "D.\"Nombre_departamento\",\n" +
+//                "CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
+//                "FROM PUBLIC.\"Inquilino\" AS I \n" +
+//                "INNER JOIN PUBLIC.\"Departamentos\" AS D\n" +
+//                "ON I.\"ID_deparamento\" = D.\"ID_departamento\"\n" +
+//                "INNER JOIN public.\"Persona\" AS P\n" +
+//                "ON I.\"idPersona\" = P.\"IdPersona\"\n" +
+//                "WHERE I.\"idResidencial\" = ${idResi}"
+
+        String query = " SELECT \n" +
+                "  I.\"ID_usuario\" AS value,\n" +
+                "  I.\"Nombre_departamento\" AS label\n" +
+                "FROM \n" +
+                "  public.\"Inquilino\"  AS I\n" +
+                "  WHERE I.\"idResidencial\" = ${idResi}"
 
         return sql.executeQueryAsList(query)
+    }
+
+    Map GetDetalles(int id){
+        String query = "SELECT \n" +
+                "  D.*\n" +
+                "FROM \n" +
+                "  public.\"Departamentos\" AS D \n" +
+                "  WHERE D.\"ID_departamento\" = ${id}"
+
+        return sql.executeQueryAsMap(query)
+    }
+
+    List ServiciosDepartamentos(int idDepart){
+        String query = "SELECT \n" +
+                "  \"ID_servicio\",\n" +
+                "  \"ID_Departamento\"\n" +
+                "FROM \n" +
+                "  public.\"DepartamentoVsServicos\"  AS DS\n" +
+                "  WHERE ds.\"ID_Departamento\" = ${idDepart}"
+
+        return sql.executeQueryAsList(query)
+    }
+
+    Boolean InsertServiciosDepartamentos(int idServicio, int idDepart){
+        String query = " INSERT INTO \n" +
+                "  public.\"DepartamentoVsServicos\"\n" +
+                "(\n" +
+                "  \"ID_servicio\",\n" +
+                "  \"ID_Departamento\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idServicio},\n" +
+                "  ${idDepart}\n" +
+                "); "
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
+    List GetServicios(int idResi){
+        String query = "SELECT \n" +
+                "  S.\"ID_servicio\" AS value,\n" +
+                "  S.\"Descripcion\" AS label\n" +
+                "FROM \n" +
+                "  public.\"Servicios\"  as S\n" +
+                "  WHERE S.\"idResidencial\" = ${idResi}"
+
+        println("Mi Query \n"+query)
+        return sql.executeQueryAsList(query)
+    }
+
+    Map getidResidencial(int idDepa){
+
+        String query = "  SELECT \n" +
+                "  R.\"ID_residencial\" AS idResi\n" +
+                "FROM \n" +
+                "  public.\"Departamentos\"  AS D\n" +
+                "  INNER JOIN PUBLIC.\"Torre\" AS T\n" +
+                "  ON D.\"ID_torre\" = T.\"ID_torre\"\n" +
+                "  INNER JOIN PUBLIC.\"Residencial\" AS R\n" +
+                "  ON T.\"ID_residencial\" = R.\"ID_residencial\"\n" +
+                "  WHERE D.\"ID_departamento\" = ${idDepa}"
+
+        return sql.executeQueryAsMap(query)
+    }
+
+    Boolean InserImgDepartamento(int iddepar, String img){
+        String query = " INSERT INTO \n" +
+                "  public.\"DepartamentoVSFoto\"\n" +
+                "(\n" +
+                "  \"idDepartamento\",\n" +
+                "  imagen\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${iddepar},\n" +
+                "  '${img}'\n" +
+                "); "
+
+        return sql.executeQueryInsertUpdate(query)
     }
 
 }

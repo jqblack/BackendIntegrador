@@ -88,5 +88,103 @@ class DepartamentoController {
         }
     }
 
+    @RequestMapping(value="/departamento/detallesdepartamento", method = RequestMethod.POST)
+    def detallesdepartamento(@RequestBody Map  data) {
 
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            return departamentoService.GetDetalles(MapData.idDeparmento as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/departamento/serviciosdepartamento", method = RequestMethod.POST)
+    def serviciosdepartamento(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            return departamentoService.ServiciosDepartamentos(MapData.idDeparmento as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/departamento/insertserviciosDepartamento", method = RequestMethod.POST)
+    def insertserviciosDepartamento(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            if(departamentoService.InsertServiciosDepartamentos(MapData.idServicio as int,MapData.idDepartamento as int)){
+                return MyCustomsRequests.MessageSuccess()
+            }
+            else{
+                return MyCustomsRequests.MessageFailed()
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/departamento/getservicios", method = RequestMethod.POST)
+    def getservicios(@RequestBody Map  data) {
+
+        Map MapData = data
+        println(data)
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            return departamentoService.GetServicios(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/departamento/getresidencial", method = RequestMethod.POST)
+    def getresidencial(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            return departamentoService.getidResidencial(MapData.idDepa as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/departamento/insertFotos", method = RequestMethod.POST)
+    def insertFotos(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            if(departamentoService.InserImgDepartamento(MapData.idDepart as int,MapData.image as String)){
+                return MyCustomsRequests.MessageSuccess()
+            }
+            else{
+                return MyCustomsRequests.MessageFailed()
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
 }

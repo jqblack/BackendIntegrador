@@ -156,4 +156,16 @@ class UsuarioService {
     }
 
 
+    Map getResidencial(int idUser){
+        String query = "SELECT \n" +
+                "  R.\"ID_residencial\"\n" +
+                "FROM \n" +
+                "  public.\"Roles\" AS R\n" +
+                "  WHERE R.\"idTipo\" = 2 AND R.\"idUsuario\" = ${idUser}"
+
+        return sql.executeQueryAsMap(query)
+
+    }
+
+
 }

@@ -26,7 +26,7 @@ class LoginService {
         else{
             List listPermissions;
 
-            query = "SELECT R.\"idTipo\" as value,\n" +
+            query = "SELECT R.\"idTipo\" as value, R.\"ID_residencial\", \n" +
                     "concat(RE.nombre,' - ',TU.tipo) as label FROM PUBLIC.\"Roles\" AS R\n" +
                     "INNER JOIN PUBLIC.\"TipoUsuario\" AS TU \n" +
                     "ON R.\"idTipo\" = TU.\"idTipoUsuario\"\n" +

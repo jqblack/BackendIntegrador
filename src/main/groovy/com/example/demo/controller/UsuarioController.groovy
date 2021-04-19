@@ -86,4 +86,21 @@ class UsuarioController {
         }
     }
 
+    @RequestMapping(value="/usuario/getidresidencial", method = RequestMethod.POST)
+    def getidresidencial(@RequestBody Map  data) {
+
+        Map MapData = data
+        println(data);
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return usuarioService.getResidencial(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
 }
