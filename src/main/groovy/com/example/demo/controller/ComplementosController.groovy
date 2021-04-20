@@ -104,7 +104,7 @@ class ComplementosController {
 
             MapData = MapData.data;
 
-            return complementosService.listaSolicitudes(MapData.idResi as int)
+            return complementosService.listaSolicitudes(MapData.idUser as int)
         }
         else{
             return MyCustomsRequests.TokenNoValido();
@@ -119,7 +119,7 @@ class ComplementosController {
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
-
+            println(data)
 
             Boolean isCompra;
             if(MapData.iscompra as int == 2){
@@ -167,7 +167,51 @@ class ComplementosController {
 
             MapData = MapData.data;
 
-            return complementosService.getSolicitudesEmpleados(MapData.idResi as int)
+            return complementosService.getSolicitudesEmpleados(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/complementos/convertirempleado", method = RequestMethod.POST)
+    def convertirempleado(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            println(data)
+            MapData = MapData.data;
+
+            if(complementosService.cambiarEmpleado(MapData.idUser as int, MapData.idResi as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/complementos/rechazarempleado", method = RequestMethod.POST)
+    def rechazarempleado(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            println(data)
+            MapData = MapData.data;
+
+            if(complementosService.rechazarempleado(MapData.idUser as int, MapData.idResi as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
         }
         else{
             return MyCustomsRequests.TokenNoValido();
@@ -182,6 +226,7 @@ class ComplementosController {
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
+            println(data)
 
             if(complementosService.InsertSolicitudEmpleados(MapData.idUser as int, MapData.idResi as int)){
 
@@ -246,8 +291,13 @@ class ComplementosController {
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
-
-            if(complementosService.InsertInquilino(MapData.idUser as int, MapData.idDepart as int, MapData.nomDepartamento as String, MapData.idResi as int, MapData.idPerso as int)){
+            println(data)
+            if(complementosService.InsertInquilino(
+                    MapData.idUser as int,
+                    MapData.idDepart as int,
+                    MapData.nomDepartameto as String,
+                    MapData.idResi as int,
+                    MapData.idPerso as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

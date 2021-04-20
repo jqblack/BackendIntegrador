@@ -86,6 +86,28 @@ class UsuarioController {
         }
     }
 
+    @RequestMapping(value="/usuario/simulacionpago", method = RequestMethod.POST)
+    def simulacionpago(@RequestBody Map  data) {
+
+        Map MapData = data
+        println(data);
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(usuarioService.simulacionpago(MapData.idUser as int)){
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/usuario/getidresidencial", method = RequestMethod.POST)
     def getidresidencial(@RequestBody Map  data) {
 

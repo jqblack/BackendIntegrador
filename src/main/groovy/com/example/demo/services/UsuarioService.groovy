@@ -105,6 +105,18 @@ class UsuarioService {
         return sql.executeQueryAsList(query)
     }
 
+    Boolean simulacionpago(int idUser){
+        String query = "UPDATE \n" +
+                "  public.\"CuentaPorCobrar\" \n" +
+                "SET \n" +
+                "  pagado = TRUE\n" +
+                "WHERE \n" +
+                "  \"Idusuario\" = ${idUser}\n" +
+                ";"
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
     List GetCuentaCobrar(int idUser){
         List ListaCuenta = [];
 

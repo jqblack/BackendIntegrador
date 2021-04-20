@@ -84,7 +84,7 @@ class Test{
                     sql.executeQueryInsertUpdate(query)
                 }
 
-                println("Residencial "+i+1+" done")
+                //println("Residencial "+i+1+" done")
             }
 
         }
@@ -92,7 +92,7 @@ class Test{
 
     }
 
-    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT5S")
+    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT24H")
     public void TriggerAreasComunes() throws InterruptedException{
 
         String query = "SELECT \n" +
@@ -141,7 +141,7 @@ class Test{
                         ";"
 
                 sql.executeQueryInsertUpdate(query)
-                println("Cambie")
+                //println("Cambie")
 
             }
         }
@@ -286,21 +286,38 @@ class ComplementosService {
         return sql.executeQueryInsertUpdate(query)
     }
 
-    List listaSolicitudes(int idResi){
-        String query = "SELECT \n" +
-                "SC.*,\n" +
-                "D.\"Nombre_departamento\", P.*, \n" +
-                "CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
-                "FROM PUBLIC.\"SolicitudCompra\" AS SC\n" +
-                "INNER JOIN PUBLIC.\"Departamentos\" AS D\n" +
-                "ON SC.\"ID_departamento\" = D.\"ID_departamento\"\n" +
-                "INNER JOIN PUBLIC.\"Usuario\" AS U\n" +
-                "ON SC.\"ID_usuario\" = U.\"idUsuario\"\n" +
-                "INNER JOIN PUBLIC.\"Persona\" AS P \n" +
-                "ON U.\"IdPersona\" = P.\"IdPersona\"\n" +
-                "WHERE SC.\"Activo\" = TRUE AND SC.\"idResidencial\" = ${idResi}"
+    List listaSolicitudes(int idUser){
 
-        return sql.executeQueryAsList(query)
+        String query = "SELECT \n" +
+                "  RO.\"Id_residencial\" AS id\n" +
+                "FROM \n" +
+                "  public.\"OwnersVsResidencia\" RO\n" +
+                "  WHERE RO.\"ID_usuario\" = ${idUser}"
+
+        List listaresi = sql.executeQueryAsList(query);
+        List Data =[]
+
+        for (int i = 0; i < listaresi.size(); i++) {
+
+            query = "SELECT \n" +
+                    "SC.*,\n" +
+                    "D.\"Nombre_departamento\", P.*, \n" +
+                    "CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
+                    "FROM PUBLIC.\"SolicitudCompra\" AS SC\n" +
+                    "INNER JOIN PUBLIC.\"Departamentos\" AS D\n" +
+                    "ON SC.\"ID_departamento\" = D.\"ID_departamento\"\n" +
+                    "INNER JOIN PUBLIC.\"Usuario\" AS U\n" +
+                    "ON SC.\"ID_usuario\" = U.\"idUsuario\"\n" +
+                    "INNER JOIN PUBLIC.\"Persona\" AS P \n" +
+                    "ON U.\"IdPersona\" = P.\"IdPersona\"\n" +
+                    "WHERE SC.\"Activo\" = TRUE AND SC.\"idResidencial\" = ${listaresi[i].id}"
+
+            Data += sql.executeQueryAsList(query)
+
+        }
+
+
+        return Data
     }
 
     Boolean InsertSolicitud(int idUser, int idDepart, int idResi, Boolean isCompra){
@@ -337,17 +354,78 @@ class ComplementosService {
         return sql.executeQueryInsertUpdate(query)
     }
 
-    List getSolicitudesEmpleados(int idResi){
-        String query = "  SELECT \n" +
-                "  SE.*,\n" +
-                "  CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombrePersona \n" +
-                "  FROM \n" +
-                "  PUBLIC.\"SolicitudEmpleados\" AS SE\n" +
-                "  INNER JOIN PUBLIC.\"Persona\" AS P\n" +
-                "  ON SE.\"idPersona\" = P.\"IdPersona\"\n" +
-                "  WHERE SE.activo = TRUE AND SE.\"idResidencial\" = ${idResi}"
+    List getSolicitudesEmpleados(int idUser){
+        String query = "SELECT \n" +
+                "  RO.\"Id_residencial\" AS id\n" +
+                "FROM \n" +
+                "  public.\"OwnersVsResidencia\" RO\n" +
+                "  WHERE RO.\"ID_usuario\" = ${idUser}"
 
-        return sql.executeQueryAsList(query);
+        List listaresi = sql.executeQueryAsList(query);
+        List Datos = []
+
+        for (int i = 0; i < listaresi.size(); i++) {
+            query = "  SELECT \n" +
+                    "  SE.*, R.nombre AS nombreresi, \n" +
+                    "  CONCAT(P.\"Nombre\",' ',P.\"Apellido\") AS nombre, P.celular \n" +
+                    "  FROM \n" +
+                    "  PUBLIC.\"SolicitudEmpleados\" AS SE\n" +
+                    "  INNER JOIN PUBLIC.\"Usuario\" AS U\n" +
+                    "  ON SE.\"idUser\" = U.\"idUsuario\" " +
+                    "INNER JOIN PUBLIC.\"Persona\" AS P " +
+                    "ON U.\"IdPersona\" = P.\"IdPersona\"  " +
+                    "INNER JOIN PUBLIC.\"Residencial\" AS R " +
+                    "ON R.\"ID_residencial\" = SE.\"idResidencial\" \n" +
+                    "  WHERE SE.activo = TRUE AND SE.\"idResidencial\" = ${listaresi[i].id}"
+
+            Datos += sql.executeQueryAsList(query)
+        }
+
+        return Datos
+    }
+
+    Boolean cambiarEmpleado(int idUser, int idResi){
+        String query = "INSERT INTO \n" +
+                "  public.\"EmpleadosvsResidencial\"\n" +
+                "(\n" +
+                "  \"idUsuario\",\n" +
+                "  \"idResidencial\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idUser},\n" +
+                "  ${idResi}\n" +
+                ");"
+
+             if(sql.executeQueryInsertUpdate(query)){
+
+                 query = "UPDATE \n" +
+                         "  public.\"SolicitudEmpleados\" \n" +
+                         "SET \n" +
+                         "  activo = FALSE\n" +
+                         "WHERE \n" +
+                         "\"idUser\" = ${idUser} AND \n" +
+                         "  \"idResidencial\" = ${idResi}\n" +
+                         ";"
+
+                 return sql.executeQueryInsertUpdate(query)
+             }
+        else{
+                 return false
+             }
+
+    }
+
+    Boolean rechazarempleado(int idUser, int idResi){
+       String  query = "UPDATE \n" +
+               "  public.\"SolicitudEmpleados\" \n" +
+               "SET \n" +
+               "  activo = FALSE\n" +
+               "WHERE \n" +
+               "\"idUser\" = ${idUser} AND\n" +
+               "  \"idResidencial\" = ${idResi}\n" +
+               ";"
+
+        return sql.executeQueryInsertUpdate(query)
     }
 
     Boolean InsertSolicitudEmpleados(int idUser, int idResi){
