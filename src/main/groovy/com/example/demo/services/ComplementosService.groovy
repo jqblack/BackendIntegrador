@@ -264,8 +264,16 @@ class ComplementosService {
         return sql.executeQueryAsList(query);
     }
 
-    Boolean InsertClasificacion(int idUser, int idDepart, int cali, String des){
-        String query = "INSERT INTO \n" +
+    Boolean InsertClasificacion(int idUser, int cali, String des){
+        String query = "  SELECT \n" +
+                "  I.\"ID_deparamento\"\n" +
+                "FROM \n" +
+                "  public.\"Inquilino\" AS I\n" +
+                "  WHERE I.\"ID_usuario\" = ${idUser}"
+
+        Map mapaUser = sql.executeQueryAsMap(query)
+
+        query = "INSERT INTO \n" +
                 "  public.\"Calificacion\"\n" +
                 "(\n" +
                 "  \"ID_usuario\",\n" +
@@ -276,7 +284,7 @@ class ComplementosService {
                 ")\n" +
                 "VALUES (\n" +
                 "  ${idUser},\n" +
-                "  ${idDepart},\n" +
+                "  ${mapaUser.ID_deparamento},\n" +
                 "  ${cali},\n" +
                 "  '${des}',\n" +
                 "  now()\n" +

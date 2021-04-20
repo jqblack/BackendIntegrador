@@ -77,11 +77,16 @@ class ComplementosController {
 
         Map MapData = data
 
+        println(data)
+
         if(MapData.key == "291290336b75b259b77e181c87cc974f"){
 
             MapData = MapData.data;
 
-            if(complementosService.InsertClasificacion(MapData.idUser as int, MapData.idDepartamento as int, MapData.calificacion as int, MapData.descripcion as String)){
+            if(complementosService.InsertClasificacion(
+                    MapData.idUser as int,
+                    MapData.calificacion as int,
+                    MapData.descripcion as String)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

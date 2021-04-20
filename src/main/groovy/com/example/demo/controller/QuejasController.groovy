@@ -109,6 +109,50 @@ class QuejasController {
         }
     }
 
+    @RequestMapping(value="/quejas/aprobada", method = RequestMethod.POST)
+    def aprobadaQueja(@RequestBody Map  data) {
+
+        Map MapData = data
+        println(data)
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(quejasService.AprobadaQueja(MapData.idQueja as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/quejas/denegada", method = RequestMethod.POST)
+    def denegada(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(quejasService.Denegada(MapData.idQueja as int)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/quejas/update", method = RequestMethod.POST)
     def updateQuejas(@RequestBody Map  data) {
 

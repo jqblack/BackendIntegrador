@@ -50,6 +50,30 @@ class QuejasService {
         return sql.executeQueryInsertUpdate(query)
     }
 
+    Boolean AprobadaQueja(int idQueja){
+        String query = " UPDATE \n" +
+                "  public.\"historialQuejas\" \n" +
+                "SET \n" +
+                "  \"idStatus\" = 2 \n" +
+                "WHERE \n" +
+                "  \"ID_Quejas\" = ${idQueja}\n" +
+                "; "
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
+    Boolean Denegada(int idQueja){
+        String query = " UPDATE \n" +
+                "  public.\"historialQuejas\" \n" +
+                "SET \n" +
+                "  \"idStatus\" = 3 \n" +
+                "WHERE \n" +
+                "  \"ID_Quejas\" = ${idQueja}\n" +
+                "; "
+
+        return sql.executeQueryInsertUpdate(query)
+    }
+
     Boolean Update(String des, int cantAdver, int limite, int costo, int diriguido, int idresi, int idTipoQueja){
         String query = "UPDATE \n" +
                 "  public.\"TipoQuejas\" \n" +
@@ -161,7 +185,7 @@ class QuejasService {
                         "  R.nombre AS nombreResi,\n" +
                         "  concat(p.\"Nombre\",' ',p.\"Apellido\") as nomperfrom,\n" +
                         "  H.\"Descripcion\" as descri,\n" +
-                        "  H.nombrefrom AS nomperto\n" +
+                        "  H.nombrefrom AS nomperto , H.\"ID_Quejas\" AS id \n" +
                         "FROM \n" +
                         "  public.\"historialQuejas\" AS H\n" +
                         "  INNER JOIN PUBLIC.\"Usuario\" AS U\n" +
@@ -172,7 +196,7 @@ class QuejasService {
                         "  ON H.\"ID_usuarioTo\" = I.\"ID_usuario\"\n" +
                         "  INNER JOIN PUBLIC.\"Residencial\" AS R\n" +
                         "  ON H.\"id_Residencial\" = R.\"ID_residencial\"\n" +
-                        "  WHERE H.\"id_Residencial\" = ${listaresi[i].id}"
+                        "  WHERE H.\"id_Residencial\" = ${listaresi[i].id} AND H.\"idStatus\" = 1 "
 
                 Data += sql.executeQueryAsList(query)
             }
