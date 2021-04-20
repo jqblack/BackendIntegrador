@@ -117,7 +117,7 @@ class UsuarioService {
         return sql.executeQueryInsertUpdate(query)
     }
 
-    List GetCuentaCobrar(int idUser){
+    Map GetCuentaCobrar(int idUser){
         List ListaCuenta = [];
 
         String query = "SELECT \n" +
@@ -144,7 +144,9 @@ class UsuarioService {
                         "AND CC.\"IdReferencia\" = ${lista[i].IdReferencia}\n" +
                         "AND CC.fecha = '${lista[i].fecha}'"
 
-                ListaCuenta  += sql.executeQueryAsMap(query)
+                println("Servicios "+i+": "+query)
+
+                ListaCuenta  += sql.executeQueryAsList(query)
             }
             else{
                 query = "SELECT \n" +
@@ -158,13 +160,25 @@ class UsuarioService {
                         "CC.\"Idusuario\" = ${idUser}\n" +
                         "AND CC.\"IdReferencia\" = ${lista[i].IdReferencia}\n" +
                         "AND CC.fecha = '${lista[i].fecha}'"
-                println(query)
-                ListaCuenta += sql.executeQueryAsMap(query)
+
+                println("Queja "+i+": "+query)
+
+                ListaCuenta += sql.executeQueryAsList(query)
             }
 
         }
 
-        return ListaCuenta
+        Map mapa = [:]
+        float total = 0;
+
+        for (int i = 0; i <ListaCuenta.size() ; i++) {
+            total += ListaCuenta[i].monto
+        }
+
+        mapa.put("total",total)
+        mapa.put("lista",ListaCuenta)
+
+        return mapa
     }
 
 

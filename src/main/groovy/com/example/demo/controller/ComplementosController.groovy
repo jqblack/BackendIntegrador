@@ -111,6 +111,22 @@ class ComplementosController {
         }
     }
 
+    @RequestMapping(value="/complementos/listaplanes", method = RequestMethod.POST)
+    def listaplanes(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return complementosService.GetPlanesResidencial(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/complementos/insertsolicitud", method = RequestMethod.POST)
     def InsertSolicitud(@RequestBody Map  data) {
 
@@ -297,7 +313,8 @@ class ComplementosController {
                     MapData.idDepart as int,
                     MapData.nomDepartameto as String,
                     MapData.idResi as int,
-                    MapData.idPerso as int)){
+                    MapData.idPerso as int,
+                    MapData.idPlan as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

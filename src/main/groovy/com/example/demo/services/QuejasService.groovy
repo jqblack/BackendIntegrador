@@ -141,8 +141,8 @@ class QuejasService {
         return sql.executeQueryAsList(query)
     }
 
-    Boolean GetListQuejasbyResidencial(int idUser){
-        
+    List GetListQuejasbyResidencial(int idUser){
+
         String query = "SELECT \n" +
                 "  RO.\"Id_residencial\" AS id\n" +
                 "FROM \n" +

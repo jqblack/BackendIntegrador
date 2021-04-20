@@ -319,6 +319,19 @@ class ComplementosService {
         return Data
     }
 
+    List GetPlanesResidencial(int idResi){
+
+        String query = "SELECT \n" +
+                "  numserial AS value,\n" +
+                "  tipo AS label\n" +
+                "FROM \n" +
+                "  public.\"TipoPredeterminadoserivios\" AS TP\n" +
+                "  WHERE TP.\"idResidencial\" = ${idResi}"
+
+        return sql.executeQueryAsList(query)
+
+    }
+
     Boolean InsertSolicitud(int idUser, int idDepart, int idResi, Boolean isCompra){
                 String query = "INSERT INTO \n" +
                 "  public.\"SolicitudCompra\"\n" +
@@ -474,7 +487,7 @@ println(query)
         return sql.executeQueryInsertUpdate(query)
     }
 
-    Boolean InsertInquilino(int idUser, int idDepart, String nomDepart, int idResi, int idPerso){
+    Boolean InsertInquilino(int idUser, int idDepart, String nomDepart, int idResi, int idPerso, int idPlan){
         String query = "INSERT INTO \n" +
                 "  public.\"Inquilino\"\n" +
                 "(\n" +
@@ -504,7 +517,9 @@ println(query)
                     "  \"idResidencial\" = ${idResi}\n" +
                     ";"
 
-            return sql.executeQueryInsertUpdate(query)
+            sql.executeQueryInsertUpdate(query)
+
+            query = ""
         }
         else{
             return false
