@@ -34,6 +34,21 @@ class residencial {
         }
     }
 
+    @RequestMapping(value="/residencial/getresidenciales", method = RequestMethod.POST)
+    def getresidencial(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+            MapData = MapData.data;
+
+            residencialservice.GetResidencialByOwner(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/residencial/insert", method = RequestMethod.POST)
     def InsertResidencial(@RequestBody Map  data) {
 
@@ -47,7 +62,7 @@ class residencial {
             if(residencialservice.InsertResidencial(MapData.nombre as String,
                     MapData.provincia as int,
                     MapData.municipio as int,
-                    MapData.sector as int,MapData.area as int,MapData.image as String)){
+                    MapData.sector as int,MapData.area as int,MapData.image as String, MapData.idUser as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

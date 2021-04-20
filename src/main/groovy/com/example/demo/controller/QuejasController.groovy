@@ -41,7 +41,13 @@ class QuejasController {
 
             MapData = MapData.data;
 
-            if(quejasService.Insert(MapData.descripcion as String,MapData.cantAdvertencia as int, MapData.limite as int, MapData.costo as int, MapData.diriguido as int, MapData.idResi as int)){
+            if(quejasService.Insert(
+                    MapData.descripcion as String,
+                    MapData.cantAdvertencia as int,
+                    MapData.limite as int,
+                    MapData.costo as int,
+                    MapData.diriguido as int,
+                    MapData.idResi as int)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

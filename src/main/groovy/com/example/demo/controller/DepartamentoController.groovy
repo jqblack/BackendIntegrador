@@ -41,7 +41,7 @@ class DepartamentoController {
             MapData = MapData.data;
 
             if(departamentoService.Insert(MapData.id as int,MapData.nombre as String,MapData.preventa as int, MapData.prealquiler as int,
-                    MapData.dispoventa as Boolean,MapData.cantBath as int, MapData.cantHabi as int, MapData.amueblado as Boolean)){
+                    MapData.dispoventa as Boolean,MapData.cantBath as int, MapData.cantHabi as int, MapData.amueblado as Boolean, MapData.image as String)){
                 return MyCustomsRequests.MessageSuccess()
             }
             else{

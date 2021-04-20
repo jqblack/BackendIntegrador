@@ -415,6 +415,23 @@ println(query)
                 "  ${idPerso}\n" +
                 ");"
 
-        return sql.executeQueryInsertUpdate(query)
+        if(sql.executeQueryInsertUpdate(query)){
+
+            query = "UPDATE \n" +
+                    "  public.\"SolicitudCompra\" \n" +
+                    "SET \n" +
+                    "  \"Activo\" = FALSE\n" +
+                    "WHERE \n" +
+                    "\"ID_usuario\" = ${idUser} AND\n" +
+                    "  \"ID_departamento\" = ${idDepart} AND\n" +
+                    "  \"idResidencial\" = ${idResi}\n" +
+                    ";"
+
+            return sql.executeQueryInsertUpdate(query)
+        }
+        else{
+            return false
+        }
+
     }
 }

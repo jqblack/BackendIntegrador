@@ -29,17 +29,50 @@ class ResidencialService {
         return sql.executeQueryAsList(query);
     }
 
-    Boolean InsertResidencial(String nombre,int pro,int muni, int sector, int area,String imgbase){
+    List GetResidencialByOwner(int idUser){
+        String query = "SELECT \n" +
+                "  R.\"ID_residencial\" AS id,\n" +
+                "  R.nombre,\n" +
+                "  R.\"ID_provincia\",\n" +
+                "  R.\"ID_municipio\",\n" +
+                "  R.\"ID_sector\",\n" +
+                "  R.areacuadrada,\n" +
+                "  R.\"MinimoVenta\",\n" +
+                "  R.\"MinimoAlquiler\",\n" +
+                "  R.\"ID_status\",\n" +
+                "  R.\"imgPortada\"\n" +
+                "FROM \n" +
+                "  public.\"Residencial\" As R\n" +
+                "  INNER JOIN PUBLIC.\"OwnersVsResidencia\" AS RO\n" +
+                "  ON R.\"ID_residencial\" = RO.\"Id_residencial\"\n" +
+                "  WHERE RO.\"ID_usuario\" = ${idUser}";
+
+
+        return sql.executeQueryAsList(query);
+    }
+
+    Boolean InsertResidencial(String nombre,int pro,int muni, int sector, int area,String imgbase, int idUser){
         String query = "INSERT INTO PUBLIC.\"Residencial\"(\"nombre\",\n" +
                 "\"ID_provincia\",\n" +
                 "\"ID_municipio\",\n" +
                 "\"ID_sector\",\n" +
                 "\"areacuadrada\", \"ID_status\", \"imgPortada\")\n" +
-                "VALUES('${nombre}',${pro},${muni},${sector},${area},${1},'${imgbase}')";
+                "VALUES('${nombre}',${pro},${muni},${sector},${area},${1},'${imgbase}') RETURNING * ";
 
+        int idResi = sql.executeQueryAsMap(query).ID_residencial
+
+        query = "  INSERT INTO \n" +
+                "  public.\"OwnersVsResidencia\"\n" +
+                "(\n" +
+                "  \"ID_usuario\",\n" +
+                "  \"Id_residencial\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  ${idUser},\n" +
+                "  ${idResi}\n" +
+                ");"
 
         return sql.executeQueryInsertUpdate(query);
-        return true
     }
 
     Boolean UpdateResidencial(String nombre,int pro,int muni, int sector, int area, int ID_resi){

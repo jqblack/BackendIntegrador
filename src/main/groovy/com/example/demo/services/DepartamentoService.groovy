@@ -28,7 +28,7 @@ class DepartamentoService {
         return sql.executeQueryAsList(query)
     }
 
-    Boolean Insert(int idTorre, String nom, int venta, int alquiler, Boolean disponibleVenta, int cantBath, int cantHabi, Boolean amueblado){
+    Boolean Insert(int idTorre, String nom, int venta, int alquiler, Boolean disponibleVenta, int cantBath, int cantHabi, Boolean amueblado, String image){
         String query = "INSERT INTO \n" +
                 "  public.\"Departamentos\"\n" +
                 "(\n" +
@@ -40,7 +40,7 @@ class DepartamentoService {
                 "  \"VentaDisponible\",\n" +
                 "  \"cantidadBath\",\n" +
                 "  canthabitaciones,\n" +
-                "  \"isAmueblado\" \n" +
+                "  \"isAmueblado\", image \n" +
                 ")\n" +
                 "VALUES (\n" +
                 "  ${idTorre},\n" +
@@ -51,7 +51,7 @@ class DepartamentoService {
                 "  ${disponibleVenta},\n" +
                         "  ${cantBath},\n" +
                         "  ${cantHabi},\n" +
-                        "  ${amueblado}\n" +
+                        "  ${amueblado} , '${image}'\n" +
                 "); ";
 
         return sql.executeQueryInsertUpdate(query)
