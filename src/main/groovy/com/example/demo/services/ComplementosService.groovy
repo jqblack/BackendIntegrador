@@ -42,11 +42,10 @@ class Test{
                 List serviciosDepartamentos = sql.executeQueryAsList(query)
 
                 query = " SELECT \n" +
-                        "  UD.*\n" +
+                        "  \"ID_usuario\"\n" +
                         "FROM \n" +
-                        "  public.\"UsuarioVsDepartamento\" AS UD" +
-                        " INNER JOIN PUBLIC.\"Departamentos\" AS D ON UD.\"idDepartamento\" = D.\"ID_departamento\" \n" +
-                        "  WHERE D.\"Disponible\" = FALSE AND UD.\"idDepartamento\" = ${lisaDepartamentos[i].ID_departamento}"
+                        "  public.\"Inquilino\" AS I\n" +
+                        "  WHERE I.\"ID_deparamento\" = ${lisaDepartamentos[i].ID_departamento}"
 
 
                 Map mapaUser = sql.executeQueryAsMap(query)
@@ -75,7 +74,7 @@ class Test{
                             "  monto\n" +
                             ")\n" +
                             "VALUES (\n" +
-                            "  ${mapaUser.idUser},\n" +
+                            "  ${mapaUser.ID_usuario},\n" +
                             "  ${mapaServicio.ID_servicio},\n" +
                             "  ${1},\n" +
                             "  ${mapaServicio.cobro}\n" +

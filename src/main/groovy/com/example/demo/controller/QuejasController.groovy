@@ -32,6 +32,55 @@ class QuejasController {
         }
     }
 
+    @RequestMapping(value="/quejas/getquejasbyinqui", method = RequestMethod.POST)
+    def GetTipoQuejasByInquilino(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return quejasService.GetTipoQuejasByInquilino(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/quejas/cargarpresunto", method = RequestMethod.POST)
+    def cargarpresunto(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return quejasService.cargarpresunto(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/quejas/listaquejasbyuser", method = RequestMethod.POST)
+    def listaquejasbyuser(@RequestBody Map  data) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            return quejasService.GetListQuejasbyResidencial(MapData.idUser as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+
     @RequestMapping(value="/quejas/insert", method = RequestMethod.POST)
     def insertQuejas(@RequestBody Map  data) {
 
@@ -92,8 +141,13 @@ class QuejasController {
 
             MapData = MapData.data;
 
-            if(quejasService.InsertQueja(MapData.idTipoqueja as int, MapData.idUserfrom as int, MapData.idUserto as int,
-                    MapData.descripcion as String, MapData.idUser as int, MapData.username as String)){
+            if(quejasService.InsertQueja(
+                    MapData.idTipoqueja as int,
+                    MapData.idUserfrom as int,
+                    MapData.idUserto as int,
+                    MapData.descripcion as String,
+                    MapData.idUser as int,
+                    MapData.username as String)){
 
                 return MyCustomsRequests.MessageSuccess();
             }

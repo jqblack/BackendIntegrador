@@ -152,6 +152,68 @@ class ResidencialService {
         return sql.executeQueryAsList(query)
     }
 
+    List GetServicos(int idResi){
+        String query = "SELECT \n" +
+                "  S.\"ID_servicio\" AS id,\n" +
+                "  S.\"Descripcion\" AS nombre\n" +
+                "FROM \n" +
+                "  public.\"Servicios\" AS S \n" +
+                "  WHERE S.\"idResidencial\" = ${idResi}"
+
+        return sql.executeQueryAsList(query)
+    }
+
+    List MisServiciosPredeterminados(int idResi){
+        String query = "SELECT \n" +
+                "  numserial,\n" +
+                "  tipo as nombre,\n" +
+                "  \"idResidencial\",\n" +
+                "  fecha\n" +
+                "FROM \n" +
+                "  public.\"TipoPredeterminadoserivios\" AS TP\n" +
+                "  WHERE TP.\"idResidencial\" = ${idResi}"
+
+        return sql.executeQueryAsList(query)
+    }
+
+    Boolean InsertPredeterminadoServices(int idResi, String nom, List listservices){
+        String query = "INSERT INTO \n" +
+                "  public.\"TipoPredeterminadoserivios\"\n" +
+                "(\n" +
+                "  tipo,\n" +
+                "  \"idResidencial\"\n" +
+                ")\n" +
+                "VALUES (\n" +
+                "  '${nom}',\n" +
+                "  ${idResi}\n" +
+                ") RETURNING * ;"
+
+        if(listservices.size()){
+            Map mapa = sql.executeQueryAsMap(query)
+
+            for (int i = 0; i < listservices.size(); i++) {
+
+                query = "INSERT INTO \n" +
+                        "  public.\"ServiciosPredeterminados\"\n" +
+                        "(\n" +
+                        "  \"idTipopredeterminado\",\n" +
+                        "  \"idServicio\"\n" +
+                        ")\n" +
+                        "VALUES (\n" +
+                        "  ${mapa.numserial},\n" +
+                        "  ${listservices[i]}\n" +
+                        ");"
+
+                sql.executeQueryInsertUpdate(query)
+            }
+            return true
+        }
+        else{
+            return false
+        }
+
+    }
+
     Map TestgetIMG(int IDIMG){
         String query = "Select * from public.\"testImg\" where id = ${IDIMG}";
         return sql.executeQueryAsMap(query)

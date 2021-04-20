@@ -21,7 +21,7 @@ class DepartamentoService {
                 "  \"Disponible\",\n" +
                 "  \"PrecioVenta\",\n" +
                 "  \"PrecioAlquiler\",\n" +
-                "  \"VentaDisponible\"\n" +
+                "  \"VentaDisponible\", image\n" +
                 "FROM \n" +
                 "  public.\"Departamentos\" WHERE \"ID_torre\" = ${idTorre}"
 

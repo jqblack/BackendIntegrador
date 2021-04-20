@@ -231,6 +231,63 @@ class residencial {
         }
     }
 
+    @RequestMapping(value="/residencial/getservicios", method = RequestMethod.POST)
+    def getservicios(@RequestBody Map  data ) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data
+
+            return residencialservice.GetServicos(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/insertpredeterminados", method = RequestMethod.POST)
+    def insertpredeterminados(@RequestBody Map  data) {
+
+        Map MapData  = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data;
+
+            if(residencialservice.InsertPredeterminadoServices(
+                    MapData.idResi as int,
+                    MapData.tipo as String,
+                    MapData.list as List)){
+
+                return MyCustomsRequests.MessageSuccess();
+            }
+            else{
+                return MyCustomsRequests.MessageFailed();
+            }
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
+    @RequestMapping(value="/residencial/getserviciospredeterminados", method = RequestMethod.POST)
+    def getserviciospredeterminados(@RequestBody Map  data ) {
+
+        Map MapData = data
+
+        if(MapData.key == "291290336b75b259b77e181c87cc974f"){
+
+            MapData = MapData.data
+
+            return residencialservice.MisServiciosPredeterminados(MapData.idResi as int)
+        }
+        else{
+            return MyCustomsRequests.TokenNoValido();
+        }
+    }
+
     @RequestMapping(value="/residencial/encryp", method = RequestMethod.POST)
     def getClientes(@RequestParam(name = "data", required = false) String data) {
 
