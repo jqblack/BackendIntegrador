@@ -20,7 +20,7 @@ class Test{
     @Autowired
     Sql sql
 
-    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT12H")
+    @Scheduled(initialDelay = 1000L, fixedDelayString = "PT10H")
     public void TriggerCuentasPorCobrar() throws InterruptedException{
 
         String query = " SELECT \n" +
@@ -527,7 +527,32 @@ println(query)
 
             sql.executeQueryInsertUpdate(query)
 
-            query = ""
+            query = "SELECT \n" +
+                    "  \"idTipopredeterminado\",\n" +
+                    "  \"idServicio\"\n" +
+                    "FROM \n" +
+                    "  public.\"ServiciosPredeterminados\" AS SP\n" +
+                    "  WHERE SP.\"idTipopredeterminado\" = ${idPlan}"
+
+            List listaservices = []
+
+            listaservices = sql.executeQueryAsList(query)
+
+            for (int i = 0; i < listaservices.size(); i++) {
+                query = "  INSERT INTO \n" +
+                        "  public.\"DepartamentoVsServicos\"\n" +
+                        "(\n" +
+                        "  \"ID_servicio\",\n" +
+                        "  \"ID_Departamento\"\n" +
+                        ")\n" +
+                        "VALUES (\n" +
+                        "  ${listaservices[i].idServicio}, \n" +
+                        "  ${idDepart}\n" +
+                        ");"
+                sql.executeQueryInsertUpdate(query)
+            }
+
+            return true
         }
         else{
             return false

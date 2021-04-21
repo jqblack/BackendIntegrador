@@ -73,11 +73,14 @@ class AreasComunesServices {
 
     List GetAreasComunes(int idResidencial){
         String query = "SELECT \n" +
-                "  AR.\"ID_areaComunes\",\n" +
-                "  AR.\"ID_residencial\"\n" +
+                "  ACR.*,\n" +
+                "  A.descripcion AS nombre\n" +
                 "FROM \n" +
-                "  public.\"AreaComunesvsResidencial\" AS AR  WHERE AR.\"ID_residencial\" = ${idResidencial}"
-
+                "  public.\"AreaComunesvsResidencial\" AS ACR\n" +
+                "  INNER JOIN PUBLIC.\"AreasComunes\" AS A\n" +
+                "  ON ACR.\"ID_areaComunes\" = A.\"ID_areaComunes\"\n" +
+                "    WHERE ACR.\"ID_residencial\" = ${idResidencial}"
+println(query)
         return sql.executeQueryAsList(query);
     }
 }
